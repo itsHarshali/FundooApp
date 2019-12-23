@@ -1,11 +1,11 @@
 
 const jwtTokenGenerator = require('../utility/TokenGeneration');
 const mailSender = require('../utility/mailSender');
-let services = require('../services/userServices')
+let service = require('../services/userServices')
 let validator = require('express-validator');
-let urlShortner= require('../utility/URLshortner')
-let service = new services.Services
-
+let Shortner =require('../utility/URLshortner')
+// let service = new services.Services
+let urlShortner = new Shortner.URL
 class Controller {
 
     registration(req, res) {
@@ -30,24 +30,32 @@ class Controller {
             password: req.body.password,
             emailid: req.body.emailid,
         }
-        new Promise((resolve, reject) => {
+       return new Promise((resolve, reject) => {
             service.userRegistration(registrationData)
                 .then(data => {
                     let payload = {
                         '_id': data._id,
-                        'emailid':data.emailid
+                        'emailid': data.emailid
                     }
                     let jwtToken = jwtTokenGenerator.generateToken(payload);
+                    console.log("token",jwtToken.token);
+                    
                     let longUrl = 'http://localhost:8080/data/' + jwtToken.token;
-                    // urlShortner.Urlshortner(data,longUrl)
-                    
-                    
-
+                    urlShortner.urlShortner(data, longUrl).then(data => {
+                        console.log("data",data)
+                        resolve(data)
+                        return res.status(200).send(data);
+                    })
+                        .catch(error => {
+                            response.error = error;
+                            reject(error)
+                            return res.status(501).send(response);
+                        })
                     response.success = true
                     resolve(data)
                     //console.log('DAtaaaaaaa :: ', data);
 
-                    return res.status(200).send({ message: data })
+                    // return res.status(200).send({ message: data })
                 })
                 .catch(err => {
                     response.success = false
@@ -139,14 +147,14 @@ class Controller {
                     resolve(data)
                     return response.status(200).send({ res, token: jwtToken.token })
                 })
-                        .catch(err => {
-                            console.log(err)
-                            res.success = false,
-                                res.message = "please chake your email"
-                                reject(err)
-                            return response.status(500).send(res);
+                    .catch(err => {
+                        console.log(err)
+                        res.success = false,
+                            res.message = "please chake your email"
+                        reject(err)
+                        return response.status(500).send(res);
 
-                        })               
+                    })
             })
         }
     }
@@ -170,26 +178,55 @@ class Controller {
                 id: request.body.data._id
             }
             console.log("pa", resetObject);
-            return new Promise((resolve,reject)=>{
-            //call userServices methods and pass the object
-            service.resetPasswordService(resetObject).then(data => {
-                // res.success = data.success;
-                res.success = true;
-                res.data = data;
-                resolve(data)
-                console.log("response in controller", data);
+            return new Promise((resolve, reject) => {
+                //call userServices methods and pass the object
+                service.resetPasswordService(resetObject).then(data => {
+                    // res.success = data.success;
+                    res.success = true;
+                    res.data = data;
+                    resolve(data)
+                    console.log("response in controller", data);
 
-                return response.status(200).send(res)
-            })
-            .catch(err=>{
-                res.success = false,
-                        res.err = err
+                    return response.status(200).send(res)
+                })
+                    .catch(err => {
+                        res.success = false,
+                            res.err = err
                         reject(err)
-                    return response.status(500).send(res);
+                        return response.status(500).send(res);
+                    })
             })
-        })
         }
     }
 
+    urlShortnerController(request, shortenerObject) {
+        return new Promise(resolve, reject => {
+            var res = {};
+            //let urlCode = urlShortner.generate(longUrl);
+            //shortUrl='http://localhost:8080/data/' + urlCode;
+            service.urlShorteningServices(request, shortenerObject).then(data => {
+                resolve(data)
+              if (data === null) {
+                    res.success = false
+                    // return res.status(500).send(res);
+                    resolve(res)
+                }
+                else {
+                    res.success = true;
+                    res.data = data;
+                    // return res.status(200).send(res);
+                    resolve(res)
+                }
+            })
+                .catch(err => {
+                    reject(err);
+                })
+        })
+    }
+
+
 }
-module.exports = { Controller }
+
+
+module.exports=new Controller();
+

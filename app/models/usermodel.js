@@ -34,7 +34,7 @@ const UserSchema = mongoose.Schema({
     },
     isVerified: {
         type: Boolean,
-        default: null
+        default: false
     }
 },
 
@@ -59,7 +59,7 @@ function encrptyPassword(password) {
 class Model {
 
     createUser(req) {
-        return new Promise((resolve,reject) => {
+        return new Promise((resolve, reject) => {
             encrptyPassword(req.password).then((encryptedPassword) => {
                 console.log("\n\n\tAfter encryption Password :" + encryptedPassword);
                 // convert data object into json format to save into schema
@@ -87,25 +87,25 @@ class Model {
         try {
             console.log("req", req.body);
             var response = {}
-            return new Promise((resolve,reject) => {
+            return new Promise((resolve, reject) => {
                 encrptyPassword(req.password).then((encryptedPassword) => {
-                   
-                        console.log('req.id');
-                        user.findOneAndUpdate({ '_id': req.id },
-                            { 'password': encryptedPassword }
-                            , (err, success) => {
-                                if (err) {
-                                    reject(err + " update password error")
-                                }
-                                else {
-                                    console.log('Changed password succesfully');
-                                    console.log("in model", success)
-                                    response.success = true;
-                                    response.message = 'Changed password succesfully';
-                                    resolve(response);
-                                }
-                            })
-                    
+
+                    console.log('req.id');
+                    user.findOneAndUpdate({ '_id': req.id },
+                        { 'password': encryptedPassword }
+                        , (err, success) => {
+                            if (err) {
+                                reject(err + " update password error")
+                            }
+                            else {
+                                console.log('Changed password succesfully');
+                                console.log("in model", success)
+                                response.success = true;
+                                response.message = 'Changed password succesfully';
+                                resolve(response);
+                            }
+                        })
+
                 })
 
                     .catch((error) => {
@@ -122,18 +122,28 @@ class Model {
     findOne(finddata) {
         return new Promise((resolve, reject) => {
             user.findOne({ "emailid": finddata.emailid }).then(data => {
-                console.log("Email id found ", data);
+                //console.log("Email id  not found ", data);
                 resolve(data)
             })
                 .catch(err => {
-                    console.log("Email id not found ", data);
+                    //console.log("Email id found ", data);
                     reject(err)
                 })
-
         })
+    }
 
-
-
+    updateOne(request, dataUpdate) {
+        console.log("data",request) //id print etc
+        return new Promise((resolve, reject) => {
+            console.log("update",dataUpdate)
+            user.findOneAndUpdate(request,dataUpdate).then(data => {
+                console.log("model",data)
+                resolve(data)
+            })
+                .catch(error => {
+                    reject(error)
+                })
+        })
     }
 
 }

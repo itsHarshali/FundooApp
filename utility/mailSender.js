@@ -23,7 +23,7 @@ sendMail(email,url)
     
     transporter.sendMail(mailOptions, function (err, info) {
         if(err)
-          console.log(err)
+          console.log("mailer",err)
         else
           console.log(info);
      });
