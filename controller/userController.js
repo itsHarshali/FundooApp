@@ -7,15 +7,19 @@ let Shortner =require('../utility/URLshortner')
 // let service = new services.Services
 let urlShortner = new Shortner.URL
 class Controller {
-
+/**
+ * @function registration for user registr all data 
+ * @param {*} req 
+ * @param {*} res 
+ */
     registration(req, res) {
 
         req.checkBody('firstName', 'firstName must be at least 3 chars long').isLength({ min: 3 }),
             req.checkBody('lastName', 'lastName must be at least 3 chars long').isAlpha()
         req.checkBody('emailid', 'Email Must be in email format').isEmail()
         //req.checkBody('emailid', 'Email Must be at least 30 chars long').isLength({ max: 30 })
-        req.checkBody('password', 'Password Must be at least 8 chars long').isLength({ min: 8 })
-        req.checkBody('password', 'Password contain alphabetical chars and numbers').isAlphanumeric()
+        req.checkBody('password', 'Password Must be at least 8 chars long').isLength({ min: 8 }).isAlphanumeric()
+        // req.checkBody('password', 'Password contain alphabetical chars and numbers')
         const errors = req.validationErrors();
         let response = {}
         if (errors) {
@@ -30,7 +34,7 @@ class Controller {
             password: req.body.password,
             emailid: req.body.emailid,
         }
-       return new Promise((resolve, reject) => {
+      
             service.userRegistration(registrationData)
                 .then(data => {
                     let payload = {
@@ -43,12 +47,12 @@ class Controller {
                     let longUrl = 'http://localhost:8080/data/' + jwtToken.token;
                     urlShortner.urlShortner(data, longUrl).then(data => {
                         console.log("data",data)
-                        resolve(data)
+                        //resolve(data)
                         return res.status(200).send(data);
                     })
                         .catch(error => {
                             response.error = error;
-                            reject(error)
+                           // reject(error)
                             return res.status(501).send(response);
                         })
                     response.success = true
@@ -64,7 +68,7 @@ class Controller {
                     reject(err)
                     return res.status(500).send({ message: err })
                 })
-        })
+        
     }
 
 
@@ -85,26 +89,22 @@ class Controller {
             loginData.emailid = req.body.emailid,
                 loginData.password = req.body.password
 
-            return new Promise((resolve, reject) => {
                 service.userLogin(loginData).then(data => {
 
                     console.log("data", data);
                     response.success = true
                     response.message = "login succesfully"
                     response.data = data
-                    resolve(data)
+               
                     return res.status(200).send(response);
                 })
                     .catch(err => {
                         console.log("Somthing went wrong in user controller");
                         response.success = false
                         response.error = err
-                        reject(err)
+                     
                         return res.status(500).send(response)
                     })
-
-            })
-
         }
     }
 
@@ -127,7 +127,7 @@ class Controller {
             }
             console.log("email id", forgotObject);
 
-            return new Promise((resolve, reject) => {
+            
                 //call userServices methods and pass the object
                 service.forgetPasswordService(forgotObject).then(data => {
                     console.log("data in controller--> ", data)
@@ -144,18 +144,18 @@ class Controller {
                     res.success = data.success,
                         res.message = "Link successfully sent to your Email"
                     // res.data = data
-                    resolve(data)
+                  
                     return response.status(200).send({ res, token: jwtToken.token })
                 })
                     .catch(err => {
                         console.log(err)
                         res.success = false,
                             res.message = "please chake your email"
-                        reject(err)
+                      
                         return response.status(500).send(res);
 
                     })
-            })
+            
         }
     }
     resetPasswordController(request, response) {
@@ -178,33 +178,33 @@ class Controller {
                 id: request.body.data._id
             }
             console.log("pa", resetObject);
-            return new Promise((resolve, reject) => {
+        
                 //call userServices methods and pass the object
                 service.resetPasswordService(resetObject).then(data => {
                     // res.success = data.success;
                     res.success = true;
                     res.data = data;
-                    resolve(data)
                     console.log("response in controller", data);
 
                     return response.status(200).send(res)
                 })
                     .catch(err => {
                         res.success = false,
-                            res.err = err
-                        reject(err)
+                            res.err = err                        
                         return response.status(500).send(res);
                     })
-            })
+            
         }
     }
 
     urlShortnerController(request, shortenerObject) {
+        try{
         return new Promise(resolve, reject => {
             var res = {};
             //let urlCode = urlShortner.generate(longUrl);
             //shortUrl='http://localhost:8080/data/' + urlCode;
-            service.urlShorteningServices(request, shortenerObject).then(data => {
+            service.urlShorteningServices(request, shortenerObject)
+            .then(data => {
                 resolve(data)
               if (data === null) {
                     res.success = false
@@ -222,6 +222,10 @@ class Controller {
                     reject(err);
                 })
         })
+    }
+    catch(error){
+        return error
+    }
     }
 
 

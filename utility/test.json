@@ -1,0 +1,53 @@
+{
+
+  "register":[
+      {  
+        "firstName":"nisswshaa",
+        "lastName":"joshssi",
+        "emailid":"harshalibadgujar3@gmail.com",
+        "password":"nissharghf12345"
+      },
+      {  
+        "firstName":"priya",
+        "lastName":"jssi",
+        "emailid":"p9r@gmail.com",
+        "password":"pri"
+      },
+      {  
+        "firstName":"leena",
+        "lastName":"badgujar",
+        "emailid":"leena123@gmail.com",
+        "password":"leena123"
+      },
+      {  
+        "firstName":"vani",
+        "lastName":"ray",
+        "emailid":"vani1234@gmail.com",
+        "password":"vani1234"
+      }
+
+
+    ],
+    "login":[
+      {  
+        "emailid":"harshalibadgujar3@gmail.com",
+        "password":"nissharghf12345"
+      },
+      {  
+        "emailid":"priya1234@gmail.com",
+        "password":"priya1234"
+      },
+      {  
+        "emailid":"leena123@gmail.com",
+        "password":"leena123"
+      },
+      {  
+        "emailid":"vani1234@gmail.com",
+        "password":"vani1234"
+      }
+
+
+    ]
+
+    
+}

@@ -15,7 +15,6 @@ class URL {
             'longUrl': longUrl,
             'shortUrl': shortUrl,
             'urlCode': urlCode
-
         }
         console.log("obj",urlShortnerObject);
         

@@ -84,7 +84,7 @@ class Model {
     }
 
     update(req) {
-        try {
+       
             console.log("req", req.body);
             var response = {}
             return new Promise((resolve, reject) => {
@@ -112,10 +112,6 @@ class Model {
                         reject(error)
                     })
             })
-        }
-        catch (err) {
-            console.log(err)
-        }
     }
 
 
