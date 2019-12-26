@@ -1,6 +1,7 @@
 
 let jwt = require('jsonwebtoken');
 
+const userModel= require('../app/models/usermodel')
 module.exports={
 generateToken(payload)
 {
@@ -47,6 +48,46 @@ verifyToken(req,res,next)
     else{
         res.status(400).send('Token not received')
     }
+},
+
+emailVerification(req,res,next){
+    let urlCode=req.params.urlCode
+    console.log("req.params.urlCode---->",urlCode);
+    return new Promise((resolve,reject)=>{
+        userModel.findOne({'urlCode':urlCode}).then((data)=>{
+            const longUrl=data.longUrl.split('http://localhost:8081/isEmailVerified/');
+            const Token =longUrl[1];
+            if(token)
+            {
+                jwt.verify(token,'privateKey',(err,decoded)=>{
+                    console.log(" token in ",token);
+                    
+                    // console.log("tkg",data);
+                    if(err)
+                    {
+                        return res.status(400).send(err+"Token has expired")
+                    }
+                    else{
+                        console.log("token",JSON.stringify(decoded));
+                        req.body['data']=decoded
+                       
+                        req.token = decoded;
+                   next();
+                    }
+                })
+                // return the req.decoded;
+            }
+            else{
+                res.status(400).send('Token not received')
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            reject(res.status(500).send('Token not received'))
+            
+        })
+            
+        })
 }
 
 }

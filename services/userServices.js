@@ -1,6 +1,6 @@
-let model = require('../app/models/usermodel')
+let userModel = require('../app/models/usermodel')
 const bcrypt = require('bcrypt')
-let userModel = new model.Model
+
 
 class Services {
 
@@ -8,6 +8,7 @@ class Services {
         try {
             return new Promise((resolve, reject) => {
                 userModel.findOne(req).then((data) => {
+console.log("data in serv", data);
 
                     if (data === null) {
 
@@ -137,6 +138,32 @@ class Services {
         })
     })
 }
+
+
+emailVerified(request) {
+    try {
+        //console.log("email verify");
+        return new Promise((resolve, reject) => {
+            //call model method for saving reset password details
+            userModel.updateOne({ "_id": request.id }, { "longUrl": shortnerObject.longUrl})
+            .then(data => {
+
+                //send data to controller callback function
+               // console.log("", data)
+                resolve(data)
+            })
+
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+
 }
 
 module.exports = new Services();
