@@ -145,15 +145,17 @@ emailVerified(request) {
         //console.log("email verify");
         return new Promise((resolve, reject) => {
             //call model method for saving reset password details
-            userModel.updateOne({ "_id": request.id }, { "longUrl": shortnerObject.longUrl})
+            userModel.updateOne({ "_id": request.id }, { "isVerified":true})
             .then(data => {
 
                 //send data to controller callback function
-               // console.log("", data)
+               console.log(" data in services", data)
                 resolve(data)
             })
 
                 .catch(err => {
+                    console.log("error in services",err);
+                    
                     reject(err)
                 })
         })

@@ -105,9 +105,7 @@ class Model {
                                 resolve(response);
                             }
                         })
-
                 })
-
                     .catch((error) => {
                         reject(error)
                     })
@@ -132,7 +130,8 @@ class Model {
         console.log("data",request) //id print etc
         return new Promise((resolve, reject) => {
             console.log("update",dataUpdate)
-            user.findOneAndUpdate(request,dataUpdate).then(data => {
+            user.findOneAndUpdate(request,dataUpdate)
+            .then(data => {
                 console.log("model",data)
                 resolve(data)
             })

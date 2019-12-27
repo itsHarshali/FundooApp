@@ -1,96 +1,87 @@
 
 let jwt = require('jsonwebtoken');
 
-const userModel= require('../app/models/usermodel')
-module.exports={
-generateToken(payload)
-{
-    console.log("2",JSON.stringify(payload))
-    let token=jwt.sign(payload,"privateKey");
-    // ,{
-    //     expiresIn:'24h'      //expires in 24 hours
-    // });
+const userModel = require('../app/models/usermodel')
+module.exports = {
+    generateToken(payload) {
+        console.log("2", JSON.stringify(payload))
+        let token = jwt.sign(payload, "privateKey");
+        // ,{
+        //     expiresIn:'24h'      //expires in 24 hours
+        // });
 
-    let object = {
-        success : true,
-        token : token
-    }
+        let object = {
+            success: true,
+            token: token
+        }
 
-    console.log(object)
-    return object;
-},
+        console.log(object)
+        return object;
+    },
 
-verifyToken(req,res,next)
-{
-    let token = req.header('token')
-    console.log(" token after vread",token);
-    
-    if(token)
-    {
-        jwt.verify(token,'privateKey',function (err,decoded){
-            console.log(" token in ",token);
-            
-            // console.log("tkg",data);
-            if(err)
-            {
-                return res.status(400).send(err+"Token has expired")
-            }
-            else{
-                console.log("token",JSON.stringify(decoded));
-                req.body['data']=decoded
-               
-                req.token = decoded;
-           next();
-            }
-        })
-        // return the req.decoded;
-    }
-    else{
-        res.status(400).send('Token not received')
-    }
-},
+    verifyToken(req, res, next) {
+        let token = req.header('token')//||req.params.url
+        console.log(" token after vread", token);
 
-emailVerification(req,res,next){
-    let urlCode=req.params.urlCode
-    console.log("req.params.urlCode---->",urlCode);
-    return new Promise((resolve,reject)=>{
-        userModel.findOne({'urlCode':urlCode}).then((data)=>{
-            const longUrl=data.longUrl.split('http://localhost:8081/isEmailVerified/');
-            const Token =longUrl[1];
-            if(token)
-            {
-                jwt.verify(token,'privateKey',(err,decoded)=>{
-                    console.log(" token in ",token);
-                    
-                    // console.log("tkg",data);
-                    if(err)
-                    {
-                        return res.status(400).send(err+"Token has expired")
-                    }
-                    else{
-                        console.log("token",JSON.stringify(decoded));
-                        req.body['data']=decoded
-                       
-                        req.token = decoded;
-                   next();
-                    }
+        if (token) {
+            jwt.verify(token, 'privateKey', function (err, decoded) {
+                console.log(" token in ", token);
+
+                // console.log("tkg",data);
+                if (err) {
+                    return res.status(400).send(err + "Token has expired")
+                }
+                else {
+                    console.log("token", JSON.stringify(decoded));
+                    req.body['data'] = decoded
+
+                    req.token = decoded;
+                    next();
+                }
+            })
+            // return the req.decoded;
+        }
+        else {
+            res.status(400).send('Token not received')
+        }
+    },
+
+    emailVerification(req, res, next) {
+        let urlCode = req.params.urlCode
+        console.log("req.params.urlCode---->", urlCode);
+        return new Promise((resolve, reject) => {
+            userModel.findOne({ 'urlCode': urlCode }).then((data) => {
+                const longUrl = data.longUrl.split('http://localhost:8081/isEmailVerified/');
+                const Token = longUrl[1];
+                if (token) {
+                    jwt.verify(token, 'privateKey', (err, decoded) => {
+                        console.log(" token in ", token);
+
+                        // console.log("tkg",data);
+                        if (err) {
+                            return res.status(400).send(err + "Token has expired")
+                        }
+                        else {
+                            console.log("token", JSON.stringify(decoded));
+                            req.body['data'] = decoded
+
+                            req.token = decoded;
+                            next();
+                        }
+                    })
+                    // return the req.decoded;
+                }
+                else {
+                    res.status(400).send('Token not received')
+                }
+            })
+                .catch((error) => {
+                    console.log(error);
+                    reject(res.status(500).send('Token not received'))
+
                 })
-                // return the req.decoded;
-            }
-            else{
-                res.status(400).send('Token not received')
-            }
         })
-        .catch((error)=>{
-            console.log(error);
-            reject(res.status(500).send('Token not received'))
-            
-        })
-            
-        })
+    }
 }
-
-}
-
 
 

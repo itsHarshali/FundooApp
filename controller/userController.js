@@ -91,7 +91,7 @@ class Controller {
                 return res.status(200).send(response);
             })
                 .catch(err => {
-                    console.log("Somthing went wrong in user controller");
+                    console.log("you need to first registare");
                     response.success = false
                     response.error = err
 
@@ -220,23 +220,30 @@ class Controller {
         }
     }
 
-    isEmailVerified(){
+    isEmailVerified(request,res){
         
-            let objectdata = {
+            var objectdata = {
                 id: request.body.data._id
             }
-            service.emailVerified(objectdata).then(data => {
-                res.success = data.success;
-                res.success = true;
-                res.data = data;
+            console.log("_id----->",request.body.data._id);
+            const response={}
+            service.emailVerified(objectdata)
+            .then(data => {
+                console.log("ssdfsassda",data);
+                
+                response.success = data.success;
+                response.success = true;
+                response.data = data;
                // console.log("response in controller", data);
 
-                return response.status(200).send(res)
+                return res.status(200).send(response)
             })
                 .catch(err => {
-                    res.success = false,
-                    res.err = err
-                    return response.status(500).send(res);
+                    console.log("xxxxxxxxxx",err);
+
+                    response.success = false,
+                    response.err = err
+                    return res.status(500).send(response);
                 })
     
 

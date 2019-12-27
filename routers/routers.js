@@ -14,25 +14,29 @@ routes.post('/registration',userController.registration)
 routes.post('/reset',token.verifyToken,userController.resetPasswordController)
 // routes.post('/disply',userController.allUserDetailsController)
 routes.post('/createNote',noteController.note)
+routes.post('/updateNote',noteController.noteUpdate)
+routes.post('/allNotes',noteController.allNotes)
+routes.post('/deleteNote',noteController.noteDelete)
 
-
-
-routes.get('/isEmailVerified/:url',(request,response)=>{
-    return new Promise((resolve,reject)=>{
-        models.findOne({'urlcode':request.params.urlcode}).then((data)=>{
-            if(data=== null){
-                //Not Found, 404, Page Not Found, or Server Not Found error message
-                reject(response.status(404).send('url not found'))
-            }
-            else{
-                resolve(response.redirect(data.longUrl))
-            }
-        })
-        .catch((error)=>{
-            reject(response.status(404).send('url not found',error))
-        })
-    })
-})
+// routes.get('/isEmailVerified/:url',(request,response)=>{
+//     return new Promise((resolve,reject)=>{
+//         models.findOne({'urlcode':request.params.urlcode})
+//         .then((data)=>{
+//             console.log('daa  jhjhjhj',data);
+            
+//             if(data=== null){
+//                 //Not Found, 404, Page Not Found, or Server Not Found error message
+//                 reject(response.status(404).send('url not found'))
+//             }
+//             else{
+//                 resolve(response.redirect(data.longUrl))
+//             }
+//         })
+//         .catch((error)=>{
+//             reject(response.status(404).send('url not found',error))
+//         })
+//     })
+// })
 routes.post('/isEmailVerified',token.verifyToken, userController.isEmailVerified)
 
 

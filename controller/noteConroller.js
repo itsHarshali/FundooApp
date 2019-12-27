@@ -34,7 +34,7 @@ class noteController {
             })
             .catch(errors => {
                 response.success = false
-                response.message = " note does note create "
+                response.message = " note does not create "
                 response.error = errors
 
                 reject(res.status(500).send(response))
@@ -43,9 +43,73 @@ class noteController {
         })
     }
 
+    noteUpdate(req, res) {
+        //console.log("controller.....",req.body);
+        let response = {}
+        const noteData = {}
+        noteData._id= req.body._id,
+        noteData.title= req.body.title,
+        noteData.description= req.body.description
+        
+        return new Promise((resolve, reject) => {
+        service.updateServices(noteData)
+            .then(data => {
+                response.success = true
+                response.message = " note update sucessesfully"
+                response.data = data
+                resolve(res.status(200).send(response))
+            })
+            .catch(errors => {
+                response.success = false
+                response.message = " note does not update "
+                response.error = errors
+                reject(res.status(500).send(response))
+
+            })
+        })
+    }
+
+noteDelete(req,res){
+    let response = {}
+        const noteData = {}
+        noteData._id= req.body._id
+        
+        return new Promise((resolve, reject) => {
+        service.deleteServices(noteData)
+            .then(data => {
+                response.success = true
+                response.message = " note delete sucessesfully"
+                response.data = data
+                resolve(res.status(200).send(response))
+            })
+            .catch(errors => {
+                response.success = false
+                response.message = " note does not delete "
+                response.error = errors
+                reject(res.status(500).send(response))
+
+            })
+        })
+}
+
+    allNotes(request, response) {
+        let res = {}
+        //call userServices methods and pass the object
+        service.getAllNotesService(request, (err, data) => {
+            if (err) {
+                console.log(err)
+                res.success = false,
+                    res.err = err
+                return response.status(500).send(res);
+            } else {
+                res.success = data.success;
+                res.data = data;
+                return response.status(200).send(res)
+            }
+        })
+    }
 
 
-    
 }
 
 module.exports = new noteController();
