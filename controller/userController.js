@@ -4,6 +4,7 @@ const mailSender = require('../utility/mailSender');
 let service = require('../services/userServices')
 let validator = require('express-validator');
 let Shortner = require('../utility/URLshortner')
+require('dotenv').config();
 // let service = new services.Services
 let urlShortner = new Shortner.URL
 class Controller {
@@ -43,7 +44,7 @@ class Controller {
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 console.log("token", jwtToken.token);
 
-                let longUrl = 'http://localhost:8080/data/' + jwtToken.token;
+                let longUrl = `${process.env.LONG_URL}` + jwtToken.token;
                 urlShortner.urlShortner(data, longUrl).then(data => {
                     console.log("data", data)
                     response.success = true
@@ -128,7 +129,7 @@ class Controller {
                 }
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 //data.token = token;
-                let url = 'http://localhost:8080/resetpassword/' + jwtToken.token;
+                let url = `${process.env.RESET_URL}`  + jwtToken.token;
                 // let url = 'http://localhost:8080/ResetPassword/'+jwtToken.token;
                 // var urlCode = urlShortner.shortUrl(url);
                 // let shortUrl = 'http://localhost:3000/#/resetpassword/' + urlCode;
@@ -220,12 +221,12 @@ class Controller {
         }
     }
 
-    isEmailVerified(request,res){
+    isEmailVerified(req,res){
         
             var objectdata = {
-                id: request.body.data._id
+                id: req.token_id
             }
-            console.log("_id----->",request.body.data._id);
+            console.log("_id----->",req.token_id);
             const response={}
             service.emailVerified(objectdata)
             .then(data => {
@@ -239,7 +240,7 @@ class Controller {
                 return res.status(200).send(response)
             })
                 .catch(err => {
-                    console.log("xxxxxxxxxx",err);
+                   console.log("ERROR",err);
 
                     response.success = false,
                     response.err = err

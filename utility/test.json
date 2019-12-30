@@ -47,7 +47,48 @@
       }
 
 
+    ],
+    "createNote":[
+      {  
+        "title":"tourist places",
+        "description":"kerala"
+      },
+      {  
+        "title":"",
+        "description":"kerala"
+      },
+      {  
+        "title":"",
+        "description":""
+      },
+      {  
+        "title":"tourist places",
+        "description":"goa"
+      }
+
+
+    ],
+    "deleteNote":[
+      {  
+        "title":"tourist places",
+        "description":"kerala"
+      },
+      {  
+        "title":"",
+        "description":"kerala"
+      },
+      {  
+        "title":"",
+        "description":""
+      },
+      {  
+        "title":"tourist places",
+        "description":"goa"
+      }
+
+
     ]
+
 
     
 }

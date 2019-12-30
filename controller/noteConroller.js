@@ -5,7 +5,7 @@ let service = require('../services/noteServices')
 require('express-validator');
 class noteController {
     /**
-     * @function note for note description all data 
+     * @function note create note function use to create note 
      * @param {*} req 
      * @param {*} res 
      */
@@ -32,7 +32,7 @@ class noteController {
                 response.data = data
                 resolve(res.status(200).send(response))
             })
-            .catch(errors => {
+            .catch(errors => {  
                 response.success = false
                 response.message = " note does not create "
                 response.error = errors
@@ -42,7 +42,11 @@ class noteController {
             })
         })
     }
-
+/**
+     * @function noteUpdate is a function use to Update  note  from database
+     * @param {*} req 
+     * @param {*} res 
+     */
     noteUpdate(req, res) {
         //console.log("controller.....",req.body);
         let response = {}
@@ -68,7 +72,11 @@ class noteController {
             })
         })
     }
-
+/**
+     * @function noteDelete is a function use to Delete  note  from database
+     * @param {*} req 
+     * @param {*} res 
+     */
 noteDelete(req,res){
     let response = {}
         const noteData = {}
@@ -91,6 +99,11 @@ noteDelete(req,res){
             })
         })
 }
+/**
+     * @function allNotes is a function use to Display all  notes
+     * @param {*} request 
+     * @param {*} response 
+     */
 
     allNotes(request, response) {
         let res = {}

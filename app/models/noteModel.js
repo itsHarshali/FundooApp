@@ -16,6 +16,10 @@ const noteSchema= mongoose.Schema({
 let user = mongoose.model('note', noteSchema);
 
 class noteModel{
+     /**
+     * @function createNote create note function use to create note 
+     * @param {*} req 
+     */
     createNote(req){
         return new Promise((resolve, reject) => {
             let noteData = new user({
@@ -35,7 +39,11 @@ class noteModel{
                 })
     }
 
-
+  /**
+     * @function updateOne update note function use to update note 
+     * @param {*} noteData 
+     * @param {*} updateData  
+     */
     updateOne(noteData, updateData) {
         console.log("data",noteData) 
         return new Promise((resolve, reject) => {
@@ -51,7 +59,10 @@ class noteModel{
         })
     }
 
-
+ /**
+     * @function findOne findone function use to find Emailid from database
+     * @param {*} finddata 
+     */
     findOne(finddata) {
         return new Promise((resolve, reject) => {
             user.findOne({ "emailid": finddata.emailid }).then(data => {
@@ -64,7 +75,11 @@ class noteModel{
                 })
         })
     }
-
+/**
+     * @function getAllNotes getAllNotes is function use to display all notes record from database
+     * @param {*} req 
+     * @param {*} callback  
+     */
     getAllNotes(req, callback) {
         try {
             console.log('req')
@@ -82,6 +97,10 @@ class noteModel{
             console.log(err)
         }
     }
+    /**
+     * @function delete  function use to delete  notes record from database
+     * @param {*} deleteData 
+     */
     delete(deleteData){
         return new Promise((resolve, reject) => {
             console.log("update",deleteData)

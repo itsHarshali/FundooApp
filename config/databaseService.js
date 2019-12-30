@@ -1,19 +1,20 @@
 /**
  * @constant mongoose object module 
  */
-const mongoose=require('    ');
+const logger =require('./winston.js')
+const mongoose=require('mongoose');
 require('dotenv/config')
-mongoose.Promise= globle.Promise;
+// mongoose.Promise= globle.Promise;
+mongoose.Promise = global.Promise;
 //conecting to database
 class database{
     constructor(){
-        this.mogoose = mongoose;
+        this.mongoose = mongoose;
         this.host = `${process.env.HOST}`;
         this.port =`${process.env.DB_PORT}`;
         this.userName= `${process.env.USSERNAME}`;
         this.password =`${process.env.PASSWORD}`;
         this.url =`${process.env.URL}`;
-
     }
     connect(){
         this.mongoose.connect(this.url,{
@@ -25,21 +26,22 @@ class database{
     }
     monitor(){
         this.mongoose.connection.on('connecting',function(){
-            console.log("trying to enstablish a connection to mongo");
+            logger.error("trying to enstablish a connection to mongo");
             
         });
         this.mongoose.connection.on('connected',function(){
-            console.log("connection enstablish sucessesfully");
+            logger.info("connection enstablish sucessesfully");
             
         });
         this.mongoose.connection.on('error',function(){
-            console.log("Connection to mongo failed",+error);
+            logger.error("Connection to mongo failed",+error);
             
         });
         this.mongoose.connection.on('disconnected',function(){
-            console.log("mongo db connection closed");
+            logger.error("mongo db connection closed");
             
         });
     }
     
 }
+module.exports= new database()

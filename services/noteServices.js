@@ -1,6 +1,10 @@
 let model = require('../app/models/noteModel')
 
 class Services {
+    /**
+     * @function noteServices is a function use to provide service to create notes
+     * @param {*} req  
+     */
     noteServices(req) {
         return new Promise((resolve, reject) => {
             model.createNote(req).then(data => {
@@ -11,7 +15,10 @@ class Services {
                 })
         })
     }
-
+/**
+     * @function updateServices is a function use to update note
+     * @param {*} noteData  
+     */
     updateServices(noteData) {
         try {
             //console.log("in note services",noteData);
@@ -40,7 +47,11 @@ class Services {
             console.log(err);
         }
     }
-
+/**
+     * @function allNotes is a function use to Display all  notes
+     * @param {*} req 
+     * @param {*} res 
+     */
     deleteServices(noteData) {
         try {
             //console.log("in note services",noteData);
@@ -59,7 +70,11 @@ class Services {
             console.log(err);
         }
     }
-
+/**
+     * @function getAllNotesService is a function use to Display all  notes
+     * @param {*} request 
+     * @param {*} callback 
+     */
     getAllNotesService(request, callback) {
         try {
             //call model method for saving reset password details

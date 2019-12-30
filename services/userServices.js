@@ -169,19 +169,3 @@ emailVerified(request) {
 }
 
 module.exports = new Services();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
