@@ -7,12 +7,9 @@ const mongoose =require('./config/databaseService')
 
 // create express app
 const app = express();
-// app.use("/", fileRoutes);
-//const port= process.env.PORT||3000
 app.use(cors());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
-
 // parse requests of content-type - application/json
 app.use(bodyParser.json())
 app.use(expressValidator())
@@ -34,14 +31,8 @@ app.use(expressValidator())
 
 app.use('/', routes);
 
-// define a simple route
-// app.get('/', (req, res) => {
-//     res.json({ "message": "Welcome to EasyNotes application[^.^]. Take notes quickly. Organize and keep track of all your notes." });
-// });
-// mongoose.connect()
 // listen for requests 
 app.listen(2000, () => {
-    //databaseObject.connect()
     mongoose.connect();
     console.log("Server is listening on port 2000");
 });

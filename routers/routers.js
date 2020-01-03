@@ -2,61 +2,61 @@
 let express = require('express')
 let routes = express.Router()
 let token = require('../utility/TokenGeneration.js')
-let models = require('../app/models/usermodel')
-let userController = require('../controller/userController')
-let noteController = require('../controller/noteConroller')
+let models = require('../app/models/user')
+let user = require('../controller/user')
+let note = require('../controller/note')
+routes.post('/registration', user.registration)
+routes.post('/login', user.login)
+routes.post('/forgetPassword', user.forgetPasswordController)
+routes.post('/reset', token.verifyToken, user.resetPasswordController)
+routes.post('/notes', note.note)
+routes.get('/notes', note.allNotes)
+routes.put('/notes/:noteId', note.noteUpdate)
+routes.delete('/notes/:noteId', note.noteDelete)
+routes.post('/isArchive/:noteId',note.isArchive)
+routes.post('/trash/:noteId',note.trash)
+routes.get('/trash',note.allTrash)    
+routes.get('/isEmailVerified/:url', (request, response) => {
+    console.log("email verifcation..", request.params.url);
+    return new Promise((resolve, reject) => {
+        models.findOne({ 'urlCode': request.params.url })
+            .then((data) => {
+                console.log('daa  jhjhjhj', data);
 
-// let userController = new Controller();
-//routes.post('/registration', userController.registration)
-routes.post('/registration', userController.registration)
-routes.post('/login', userController.login)
-routes.post('/forgetPassword', userController.forgetPasswordController)
-routes.post('/reset', token.verifyToken, userController.resetPasswordController)
-// routes.post('/disply',userController.allUserDetailsController)
-routes.post('/createNote', noteController.note)
-routes.post('/updateNote', noteController.noteUpdate)
-routes.post('/allNotes', noteController.allNotes)
-routes.post('/deleteNote', noteController.noteDelete)
-routes.post('/isEmailVerified', token.verifyToken, userController.isEmailVerified)
- 
-// routes.get('/isEmailVerified/:url',(request,response)=>{
-//     return new Promise((resolve,reject)=>{
-//         models.findOne({'urlcode':request.params.urlcode})
-//         .then((data)=>{
-//             console.log('daa  jhjhjhj',data);
+                if (data === null) {
+                    //Not Found, 404, Page Not Found, or Server Not Found error message
+                    reject(response.status(404).send('url not found'))
+                }
+                else {
+                    resolve(response.redirect(data.longUrl))
+                }
+            })
+            .catch((error) => {
+                reject(response.status(404).send('url not found', error))
+            })
+    })
+})
 
-//             if(data=== null){
-//                 //Not Found, 404, Page Not Found, or Server Not Found error message
-//                 reject(response.status(404).send('url not found'))
-//             }
-//             else{
-//                 resolve(response.redirect(data.longUrl))
-//             }
-//         })
-//         .catch((error)=>{
-//             reject(response.status(404).send('url not found',error))
-//         })
-//     })
-// })
-
-
-
-
+routes.post('/isEmailVerified', token.verifyToken, user.isEmailVerified)
 
 const upload = require('../services/file-upload')
+
 const singleUpload = upload.single('image');
 
-routes.post('/image-upload', function (req, res) {
-
+routes.post('/image-upload/:userId', function (req, res) {
+    let data={}
+    data._id=req.params.userId
+    
+    console.log("user Id",req.params.userId);  
     singleUpload(req, res, function (err) {
-
-        if (err) {
-            console.log('File ERRO',err);
-            
+        if (err) {          
+            console.log('File ERROR', err);
             return res.status(422).send({ errors: [{ title: 'File Upload Error', detail: err.message }] });
         }
-
-        return res.json({ 'imageUrl': req.file.location });
+        console.log('request',req.file.location);  
+        data.imageUrl=req.file.location   
+        user.addImage(data,res)       
+        //return res.json({ 'imageUrl': req.file.location });
     });
 });
 

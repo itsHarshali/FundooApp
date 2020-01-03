@@ -35,13 +35,15 @@ const UserSchema = mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false
+    },
+    imageUrl: {
+        type: String,
+        default: null
     }
 },
-
     {
         timestamps: true
     });
-
 
 let user = mongoose.model('User', UserSchema);
 
@@ -56,8 +58,8 @@ function encrptyPassword(password) {
             })
     })
 }
-class Model {
 
+class Model {
     createUser(req) {
         return new Promise((resolve, reject) => {
             encrptyPassword(req.password).then((encryptedPassword) => {
@@ -112,10 +114,10 @@ class Model {
             })
     }
 
-
+   
     findOne(finddata) {
         return new Promise((resolve, reject) => {
-            user.findOne({ "emailid": finddata.emailid }).then(data => {
+            user.findOne(finddata).then(data => {
                 //console.log("Email id  not found ", data);
                 resolve(data)
             })
@@ -127,7 +129,7 @@ class Model {
     }
 
     updateOne(request, dataUpdate) {
-        console.log("data",request) //id print etc
+        //console.log("data",request) //id print etc
         return new Promise((resolve, reject) => {
             console.log("update",dataUpdate)
             user.findOneAndUpdate(request,dataUpdate)

@@ -1,10 +1,13 @@
 
 const jwtTokenGenerator = require('../utility/TokenGeneration');
 const mailSender = require('../utility/mailSender');
-let service = require('../services/userServices')
+let service = require('../services/user')
 let validator = require('express-validator');
 let Shortner = require('../utility/URLshortner')
+const redis= require('redis')
 require('dotenv').config();
+const client = redis.createClient(`${process.env.REDIS_PORT}`);
+
 // let service = new services.Services
 let urlShortner = new Shortner.URL
 class Controller {
@@ -43,6 +46,8 @@ class Controller {
                 }
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 console.log("token", jwtToken.token);
+                //redis set
+                client.set('Token'+data._id,jwtToken.token)
 
                 let longUrl = `${process.env.LONG_URL}` + jwtToken.token;
                 urlShortner.urlShortner(data, longUrl).then(data => {
@@ -63,7 +68,7 @@ class Controller {
                 response.success = false
                 response.message = "Your already registered"
                 response.error = errors
-                return res.status(500).send(response)
+                return res.status(422).send(response)
             })
     }
     login(req, res) {
@@ -96,7 +101,7 @@ class Controller {
                     response.success = false
                     response.error = err
 
-                    return res.status(500).send(response)
+                    return res.status(422).send(response)
                 })
         }
     }
@@ -112,7 +117,7 @@ class Controller {
             res.message = error[0].msg;
             res.error = error;
             console.log(res);
-            return response.status(500).send(res);
+            return response.status(422).send(res);
         }
         else {
             let forgotObject = {
@@ -130,9 +135,7 @@ class Controller {
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 //data.token = token;
                 let url = `${process.env.RESET_URL}`  + jwtToken.token;
-                // let url = 'http://localhost:8080/ResetPassword/'+jwtToken.token;
-                // var urlCode = urlShortner.shortUrl(url);
-                // let shortUrl = 'http://localhost:3000/#/resetpassword/' + urlCode;
+              
                 mailSender.sendMail(data.emailid, url);
                 res.success = data.success,
                     res.message = "Link successfully sent to your Email"
@@ -145,7 +148,7 @@ class Controller {
                     res.success = false,
                         res.message = "please chake your email"
 
-                    return response.status(500).send(res);
+                    return response.status(422).send(res);
 
                 })
 
@@ -163,7 +166,7 @@ class Controller {
             res.success = false;
             res.message = errors[0].msg;
             res.error = errors;
-            return response.status(500).send(res);
+            return response.status(422).send(res);
         }
         else {
             let resetObject = {
@@ -184,7 +187,7 @@ class Controller {
                 .catch(err => {
                     res.success = false,
                         res.err = err
-                    return response.status(500).send(res);
+                    return response.status(422).send(res);
                 })
 
         }
@@ -220,9 +223,7 @@ class Controller {
             return error
         }
     }
-
-    isEmailVerified(req,res){
-        
+    isEmailVerified(req,res){       
             var objectdata = {
                 id: req.token_id
             }
@@ -237,20 +238,43 @@ class Controller {
                 response.data = data;
                // console.log("response in controller", data);
 
-                return res.status(200).send(response)
+                return res.status(302).send(response)
             })
                 .catch(err => {
                    console.log("ERROR",err);
 
                     response.success = false,
                     response.err = err
-                    return res.status(500).send(response);
+                    return res.status(422).send(response);
                 })
-    
-
     }
 
+    addImage(req,res){
+        console.log('req in controller',req);
+        // console.log('req in controller',req.params);
 
+        // const  imageData={}
+        //     imageData._id=req.params.userId
+        //     imageData.imageUrl= req.file.location 
+        let response = {}
+        service.image(req).then(data => {
+
+            console.log("data", data);
+            response.success = true
+            response.message = "image save succesfully"
+            response.data = data
+
+            return res.status(200).send(response);
+        })
+            .catch(err => {
+                console.log(" somthing wrong to save image");
+                response.success = false
+                response.error = err
+
+                return res.status(422).send(response)
+            })
+}
+   
 
 }
 module.exports = new Controller();

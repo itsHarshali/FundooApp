@@ -1,4 +1,4 @@
-let model = require('../app/models/noteModel')
+let model = require('../app/models/note')
 
 class Services {
     /**
@@ -93,8 +93,47 @@ class Services {
             console.log(error);
         }
     }
+archive(request){
+        console.log(" verify-----", request);
+        return new Promise((resolve, reject) => {
+            model.updateOne({ "_id": request}, { "isArchive": true })
+                .then(data => {
+                    console.log(" data in services", data)
+                    resolve(data)
+                })
 
+                .catch(err => {
+                    console.log("error in services", err);
+                    reject(err)
+                })
+        })
+    
+}
 
+isTrash(request){
+    return new Promise((resolve,reject)=>{
+        model.updateOne({"_id":request},{"trash":true})
+        .then(data=>{
+            resolve(data)
+        })
+        .catch(error=>{
+            reject(error)
+        })
+    })
+}
+getAllTrash(request){
+
+        return new Promise((resolve,reject)=>{
+        model.getAll(request)
+        .then(data=>{
+            resolve(data)
+        })
+        .catch(error=>{
+            reject(error)
+        })
+         
+    })
+}
 
 }
 module.exports = new Services();

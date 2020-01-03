@@ -1,7 +1,18 @@
 
 let jwt = require('jsonwebtoken');
+require('dotenv').config();
+const redis= require('redis')
+const userModel = require('../app/models/user')
+// create and connect redis client to local instance.
+const client = redis.createClient(`${process.env.REDIS_PORT}`);
 
-const userModel = require('../app/models/usermodel')
+// Print redis connect to the console
+client.on('connect', () => {
+    console.log("redis connected on port ", `${process.env.REDIS_PORT}`);
+  });
+
+
+
 module.exports = {
     generateToken(payload) {
         console.log("2", JSON.stringify(payload))
@@ -35,8 +46,18 @@ module.exports = {
                     console.log("token", JSON.stringify(decoded));
                     req.body['data'] = decoded
 
-                    req.token = decoded;
-                    next();
+                    req.token = decoded; 
+                    client.get('Token'+ decoded._id,(error,data)=>{
+                        if(error){
+                            console.log("error occured genrating redixtoken")
+                        }
+                        else if ( data === token){
+                            console.log( "cache data and token found equal",data);
+                            next();  
+                        }
+                       
+                    })
+
                 }
             })
             // return the req.decoded;
@@ -77,7 +98,7 @@ module.exports = {
             })
                 .catch((error) => {
                     console.log(error);
-                    reject(res.status(500).send('Token not received'))
+                    reject(res.status(404).send('Token not received'))
 
                 })
         })

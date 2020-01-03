@@ -2,7 +2,7 @@ require('dotenv').config();
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-
+//initiallize instance
 const s3Config = new AWS.S3({
     accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
     secretAccessKey: `${process.env.AWS_SECRET_ACCESS}`,
@@ -26,11 +26,11 @@ const fileFilter = (req, file, cb) => {
 //         cb(null, new Date().toISOString() + '-' + file.originalname)
 //     }
 // })
-
+// acl access control list
 const multerS3Config = multerS3({
     s3: s3Config,
     bucket: "mybucket2000",
-    acl: 'public-read',
+    acl: 'public-read',    // acl access control list
     metadata: function (req, file, cb) {
         cb(null, { fieldName: file.fieldname });
     },
@@ -76,9 +76,7 @@ module.exports = upload;
 
 // aws.config.update({
 
-//     accessKeyId:'"AAKIAINM7APXJXUYLNRAQ"',
-//     secretAccessKey:'f9nFrPSPQ6G7ppGLlliQ9Rw7bkgM7GXl1FE/Iq36',
-//     region:'ap-south-1'
+
 // //     secretAccessKey: `${process.env.AWS_SECRET_ACCESS}`,
 // //     accessKeyId: `${process.env.AWS_ACCESS_KEY}`,
 // //     region: 'ap-south-1'

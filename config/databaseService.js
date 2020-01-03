@@ -41,7 +41,6 @@ class database{
             logger.error("mongo db connection closed");
             
         });
-    }
-    
+    }    
 }
 module.exports= new database()

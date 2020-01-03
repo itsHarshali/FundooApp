@@ -1,5 +1,5 @@
 const urlShortner = require('shortid')
-const serviceObject = require('../services/userServices')
+const serviceObject = require('../services/user')
 const mailSender = require('./mailSender')
 // const controllerObject = new Controller()
 
@@ -10,7 +10,7 @@ class URL {
         console.log("in urlshortner utility",data);
         
         var urlCode = urlShortner.generate(longUrl);
-        let shortUrl = 'http://localhost:8080/data/' + urlCode;
+        let shortUrl = 'http://localhost:2000/isEmailVerified/' + urlCode;
         let urlShortnerObject = {
             'longUrl': longUrl,
             'shortUrl': shortUrl,

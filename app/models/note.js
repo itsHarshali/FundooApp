@@ -9,12 +9,40 @@ const noteSchema= mongoose.Schema({
         type: String,
         require: true
     },
+    userId: {
+        type: String,
+        require: true
+    },
+    reminder: {
+        type: Date,
+        default:null
+    },
+    isArchive: {
+        type: Boolean,
+        default:false
+    },
+    trash: {
+        type: Boolean,
+        default:false
+    },
+    selectColor: {
+        type: String,
+        default: null
+    },
+    imageUrl: {
+        type: String  
+    }, 
 
-
-})
+    addImage: {
+        type: String,
+        default: null
+    }
+    },
+    {
+        timestamps: true
+    });
 
 let user = mongoose.model('note', noteSchema);
-
 class noteModel{
      /**
      * @function createNote create note function use to create note 
@@ -25,8 +53,12 @@ class noteModel{
             let noteData = new user({
                 "title": req.title,
                 "description": req.description,
+                "reminder":null,
+                "isArchive": false,
+                "trash": false
             })
-                noteData.save().then(data => {
+                noteData.save()
+                .then(data => {
                     console.log('Note save sucessfully' , data.title);
                     resolve(data)
                 })
@@ -39,12 +71,14 @@ class noteModel{
                 })
     }
 
-  /**
+
+    /**
      * @function updateOne update note function use to update note 
      * @param {*} noteData 
      * @param {*} updateData  
      */
-    updateOne(noteData, updateData) {
+    
+     updateOne(noteData, updateData) {
         console.log("data",noteData) 
         return new Promise((resolve, reject) => {
             console.log("update",updateData)
@@ -59,13 +93,15 @@ class noteModel{
         })
     }
 
- /**
+    /**
      * @function findOne findone function use to find Emailid from database
      * @param {*} finddata 
      */
+
     findOne(finddata) {
         return new Promise((resolve, reject) => {
-            user.findOne({ "emailid": finddata.emailid }).then(data => {
+            user.findOne({ "emailid": finddata.emailid })
+            .then(data => {
                 //console.log("Email id  not found ", data);
                 resolve(data)
             })
@@ -75,11 +111,13 @@ class noteModel{
                 })
         })
     }
-/**
+
+     /**
      * @function getAllNotes getAllNotes is function use to display all notes record from database
      * @param {*} req 
      * @param {*} callback  
      */
+
     getAllNotes(req, callback) {
         try {
             console.log('req')
@@ -97,10 +135,25 @@ class noteModel{
             console.log(err)
         }
     }
+
+   getAll(req){
+       return new promise((resolve,reject)=>{
+        user.find({})
+        .then(data=>{
+            resolve(data)
+        })
+        .catch(error=>{
+            reject(error)
+        })
+       })
+   }
+
+
     /**
      * @function delete  function use to delete  notes record from database
      * @param {*} deleteData 
      */
+
     delete(deleteData){
         return new Promise((resolve, reject) => {
             console.log("update",deleteData)
@@ -114,6 +167,6 @@ class noteModel{
                 })
         })
     }
-
 }
+
 module.exports= new noteModel()
