@@ -69,7 +69,8 @@ class Model {
                     "firstName": req.firstName,
                     "lastName": req.lastName,
                     "password": encryptedPassword,
-                    "emailid": req.emailid
+                    "emailid": req.emailid,
+                    "isVerified":false
                 })
                 userData.save().then(data => {
                     console.log('Registration successful ', data.firstName);
@@ -85,8 +86,7 @@ class Model {
         })
     }
 
-    update(req) {
-       
+    update(req) {      
             console.log("req", req.body);
             var response = {}
             return new Promise((resolve, reject) => {
@@ -94,8 +94,8 @@ class Model {
 
                     console.log('req.id');
                     user.findOneAndUpdate({ '_id': req.id },
-                        { 'password': encryptedPassword }
-                        , (err, success) => {
+                        { 'password': encryptedPassword },
+                        {new: true}, (err, success) => {
                             if (err) {
                                 reject(err + " update password error")
                             }
@@ -116,13 +116,17 @@ class Model {
 
    
     findOne(finddata) {
+        console.log("find data",finddata);
+        
         return new Promise((resolve, reject) => {
+            console.log("...");
+            
             user.findOne(finddata).then(data => {
-                //console.log("Email id  not found ", data);
+                console.log("Email id  not found ", data);
                 resolve(data)
             })
                 .catch(err => {
-                    //console.log("Email id found ", data);
+                    //console.log("Email id not found ");
                     reject(err)
                 })
         })
@@ -132,7 +136,7 @@ class Model {
         //console.log("data",request) //id print etc
         return new Promise((resolve, reject) => {
             console.log("update",dataUpdate)
-            user.findOneAndUpdate(request,dataUpdate)
+            user.findOneAndUpdate(request,dataUpdate,{new:true})
             .then(data => {
                 console.log("model",data)
                 resolve(data)

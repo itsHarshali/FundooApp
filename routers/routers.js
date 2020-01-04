@@ -9,13 +9,14 @@ routes.post('/registration', user.registration)
 routes.post('/login', user.login)
 routes.post('/forgetPassword', user.forgetPasswordController)
 routes.post('/reset', token.verifyToken, user.resetPasswordController)
-routes.post('/notes', note.note)
+
+routes.post('/notes', token.verifyToken, note.note)
 routes.get('/notes', note.allNotes)
 routes.put('/notes/:noteId', note.noteUpdate)
 routes.delete('/notes/:noteId', note.noteDelete)
 routes.post('/isArchive/:noteId',note.isArchive)
 routes.post('/trash/:noteId',note.trash)
-routes.get('/trash',note.allTrash)    
+routes.get('/trash/:noteId',note.allTrash)    
 routes.get('/isEmailVerified/:url', (request, response) => {
     console.log("email verifcation..", request.params.url);
     return new Promise((resolve, reject) => {

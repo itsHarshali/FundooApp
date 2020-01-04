@@ -19,8 +19,10 @@ class noteController {
             response.error = errors
             return res.status(422).send(response)//The 422 (Unprocessable Entity) status code 
         }
+            console.log("userId:req.body._id,",req.body);
 
         let data = {
+            userID:req.body.data._id,
             title: req.body.title,
             description: req.body.description,
         }
@@ -165,13 +167,15 @@ class noteController {
     }
 
 
-    allTrash(req, response) {
+    allTrash(request, response) {
         let res = {}
-        const userData= req.params.userId
-        console.log("request------------------",request);
+        const noteData={}
+        noteData._id = request.params.noteId
+        //request.params.userId
+        console.log("userData---------------->>",noteData);
         
         //call userServices methods and pass the object
-        service.getAllTrash(request)
+        service.getAllTrash(noteData)
         .then(data=>{
                res.success = data.success;
                 res.data = data;
@@ -181,9 +185,7 @@ class noteController {
             res.success=false,
             res.error=error
             return response.status(422).send(res)
-        })
-            
-        
+        })                   
     }
 }
 

@@ -4,7 +4,7 @@ const mailSender = require('../utility/mailSender');
 let service = require('../services/user')
 let validator = require('express-validator');
 let Shortner = require('../utility/URLshortner')
-const redis= require('redis')
+const redis = require('redis')
 require('dotenv').config();
 const client = redis.createClient(`${process.env.REDIS_PORT}`);
 
@@ -47,7 +47,7 @@ class Controller {
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 console.log("token", jwtToken.token);
                 //redis set
-                client.set('Token'+data._id,jwtToken.token)
+                client.set('Token' + data._id, jwtToken.token)
 
                 let longUrl = `${process.env.LONG_URL}` + jwtToken.token;
                 urlShortner.urlShortner(data, longUrl).then(data => {
@@ -82,20 +82,30 @@ class Controller {
         }
 
         else {
+            console.log("token");
 
             const loginData = {}
+
             loginData.emailid = req.body.emailid,
                 loginData.password = req.body.password
+            console.log("login data");
 
-            service.userLogin(loginData).then(data => {
+            service.userLogin(loginData)
+                .then(data => {
+                    let payload = {
+                        '_id': data._id,
+                        'emailid': data.emailid
+                    }
+                    let jwtToken = jwtTokenGenerator.generateToken(payload);
+                    console.log("jwtToken", jwtToken);
 
-                console.log("data", data);
-                response.success = true
-                response.message = "login succesfully"
-                response.data = data
+                    console.log("data", data);
+                    response.success = true
+                    response.message = "login succesfully"
+                    response.data = data
 
-                return res.status(200).send(response);
-            })
+                    return res.status(200).send(response);
+                })
                 .catch(err => {
                     console.log("you need to first registare");
                     response.success = false
@@ -134,8 +144,8 @@ class Controller {
                 }
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 //data.token = token;
-                let url = `${process.env.RESET_URL}`  + jwtToken.token;
-              
+                let url = `${process.env.RESET_URL}` + jwtToken.token;
+
                 mailSender.sendMail(data.emailid, url);
                 res.success = data.success,
                     res.message = "Link successfully sent to your Email"
@@ -151,7 +161,6 @@ class Controller {
                     return response.status(422).send(res);
 
                 })
-
         }
     }
     resetPasswordController(request, response) {
@@ -173,7 +182,7 @@ class Controller {
                 password: request.body.password,
                 id: request.body.data._id
             }
-            console.log("pa", resetObject);
+            //console.log("pa", resetObject);
 
             //call userServices methods and pass the object
             service.resetPasswordService(resetObject).then(data => {
@@ -223,34 +232,34 @@ class Controller {
             return error
         }
     }
-    isEmailVerified(req,res){       
-            var objectdata = {
-                id: req.token_id
-            }
-            console.log("_id----->",req.token_id);
-            const response={}
-            service.emailVerified(objectdata)
+    isEmailVerified(req, res) {
+        var objectdata = {
+            id: req.body.data._id
+        }
+        console.log("_id----->", req.body.data._id);
+        const response = {}
+        service.emailVerified(objectdata)
             .then(data => {
-                console.log("ssdfsassda",data);
-                
-                response.success = data.success;
+                console.log("ssdfsassda", data);
+
+                // response.success = data.success;
                 response.success = true;
                 response.data = data;
-               // console.log("response in controller", data);
+                // console.log("response in controller", data);
 
                 return res.status(302).send(response)
             })
-                .catch(err => {
-                   console.log("ERROR",err);
+            .catch(err => {
+                console.log("ERROR", err);
 
-                    response.success = false,
+                response.success = false,
                     response.err = err
-                    return res.status(422).send(response);
-                })
+                return res.status(422).send(response);
+            })
     }
 
-    addImage(req,res){
-        console.log('req in controller',req);
+    addImage(req, res) {
+        console.log('req in controller', req);
         // console.log('req in controller',req.params);
 
         // const  imageData={}
@@ -273,8 +282,8 @@ class Controller {
 
                 return res.status(422).send(response)
             })
-}
-   
+    }
+
 
 }
 module.exports = new Controller();

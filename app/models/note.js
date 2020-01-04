@@ -1,5 +1,5 @@
 const mongoose= require('mongoose');
-
+const Schema=mongoose.Schema
 const noteSchema= mongoose.Schema({
     title: {
         type: String,
@@ -9,8 +9,8 @@ const noteSchema= mongoose.Schema({
         type: String,
         require: true
     },
-    userId: {
-        type: String,
+    userID: {
+        type: Schema.Types.ObjectId,
         require: true
     },
     reminder: {
@@ -53,6 +53,7 @@ class noteModel{
             let noteData = new user({
                 "title": req.title,
                 "description": req.description,
+                "userID": req.userID,
                 "reminder":null,
                 "isArchive": false,
                 "trash": false
@@ -137,12 +138,15 @@ class noteModel{
     }
 
    getAll(req){
+      // console.log(req,"........");       
        return new promise((resolve,reject)=>{
         user.find({})
         .then(data=>{
+            //console.log(data,",,,,,,,,,,,,,,,,,,,,,,,,");            
             resolve(data)
         })
         .catch(error=>{
+            console.log("error");
             reject(error)
         })
        })

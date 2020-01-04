@@ -36,35 +36,45 @@ class Services {
 
 
     userLogin(loginData) {
-        try {
 
-            return new Promise((resolve, reject) => {
-                userModel.findOne(loginData).then((data) => {
+        return new Promise((resolve, reject) => {
+            userModel.findOne({ "emailid": loginData.emailid })
+                .then((data) => {
+                    console.log("data in services", data);
 
                     if (data !== null) {
-                        bcrypt.compare(loginData.password, data.password)
-                            .then((data) => {
-                                if (data) {
-                                    resolve(data)
-                                }
-                                else {
-                                    reject(err)
-                                }
-                            })
-                            .catch(err => {
-                                reject(err)
-                            })
-                    }
-                })
-                    .catch(err => {
-                        console.log("error in service");
-                        reject(err)
-                    })
-            })
+                        // console.log("-----------",data.isVerified);
 
-        } catch (error) {
-            console.log(error);
-        }
+                        // userModel.findOne({"isVerified": data.isVerified})
+                        // .then(data=>{
+                        if (data.isVerified === true) {
+                            bcrypt.compare(loginData.password, data.password)
+                                .then((data) => {
+                                    if (data) {
+                                        resolve(data)
+                                    }
+                                    else {
+                                        reject(err)
+                                    }
+                                })
+                        } else {
+                            reject(" you need check your email and verify first ");
+
+                        }
+                        // })
+                    }
+                    else if (data === null) {
+                        reject("this email id is not registered... ");
+
+                    }
+
+                })
+                .catch(err => {
+                    // console.log("error in service");
+                    reject(err)
+                })
+        })
+
     }
 
     forgetPasswordService(loginData) {
@@ -177,7 +187,7 @@ class Services {
             //console.log("email verify");
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
-                userModel.updateOne({ "_id": request._id }, { "imageUrl":request.imageUrl})
+                userModel.updateOne({ "_id": request._id }, { "imageUrl": request.imageUrl })
                     .then(data => {
 
                         //send data to controller callback function

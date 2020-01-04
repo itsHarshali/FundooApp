@@ -11,11 +11,11 @@ client.on('connect', () => {
     console.log("redis connected on port ", `${process.env.REDIS_PORT}`);
   });
 
-
-
 module.exports = {
     generateToken(payload) {
         console.log("2", JSON.stringify(payload))
+        console.log("payload  .",payload);
+        
         let token = jwt.sign(payload, "privateKey");
         // ,{
         //     expiresIn:'24h'      //expires in 24 hours
@@ -36,7 +36,7 @@ module.exports = {
 
         if (token) {
             jwt.verify(token, 'privateKey', function (err, decoded) {
-                console.log(" token in ", token);
+                console.log(" token in verify token", token);
 
                 // console.log("tkg",data);
                 if (err) {

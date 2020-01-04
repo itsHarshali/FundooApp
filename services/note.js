@@ -121,12 +121,22 @@ isTrash(request){
         })
     })
 }
+
 getAllTrash(request){
+console.log("req in services",request);
 
         return new Promise((resolve,reject)=>{
         model.getAll(request)
         .then(data=>{
+            if(trash==true){
+                console.log(data);
+                
             resolve(data)
+            }
+            else {
+                console.log("nothing in trash")
+                reject(error)
+            }
         })
         .catch(error=>{
             reject(error)
