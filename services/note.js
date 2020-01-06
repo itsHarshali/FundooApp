@@ -15,10 +15,10 @@ class Services {
                 })
         })
     }
-/**
-     * @function updateServices is a function use to update note
-     * @param {*} noteData  
-     */
+    /**
+         * @function updateServices is a function use to update note
+         * @param {*} noteData  
+         */
     updateServices(noteData) {
         try {
             //console.log("in note services",noteData);
@@ -47,17 +47,17 @@ class Services {
             console.log(err);
         }
     }
-/**
-     * @function allNotes is a function use to Display all  notes
-     * @param {*} req 
-     * @param {*} res 
-     */
+    /**
+         * @function deleteServices is a function use to delete perticular note
+         * @param {*} req 
+         * @param {*} res 
+         */
     deleteServices(noteData) {
         try {
             //console.log("in note services",noteData);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
-                model.delete({ "_id": noteData._id })
+                model.updateOne({ "_id": noteData._id }, { 'trash': true })
                     .then((data) => {
                         resolve(data)
                     })
@@ -70,11 +70,11 @@ class Services {
             console.log(err);
         }
     }
-/**
-     * @function getAllNotesService is a function use to Display all  notes
-     * @param {*} request 
-     * @param {*} callback 
-     */
+    /**
+         * @function getAllNotesService is a function use to Display all  notes
+         * @param {*} request 
+         * @param {*} callback 
+         */
     getAllNotesService(request, callback) {
         try {
             //call model method for saving reset password details
@@ -93,10 +93,10 @@ class Services {
             console.log(error);
         }
     }
-archive(request){
-        console.log(" verify-----", request);
+    archive(request) {
+        console.log(" verify----->", request);
         return new Promise((resolve, reject) => {
-            model.updateOne({ "_id": request}, { "isArchive": true })
+            model.updateOne({ "_id": request }, { "isArchive": true })
                 .then(data => {
                     console.log(" data in services", data)
                     resolve(data)
@@ -107,43 +107,141 @@ archive(request){
                     reject(err)
                 })
         })
-    
-}
 
-isTrash(request){
-    return new Promise((resolve,reject)=>{
-        model.updateOne({"_id":request},{"trash":true})
-        .then(data=>{
-            resolve(data)
-        })
-        .catch(error=>{
-            reject(error)
-        })
-    })
-}
+    }
+    unArchive(request) {
+        console.log(" verify-----", request);
+        return new Promise((resolve, reject) => {
+            model.updateOne({ "_id": request }, { "isArchive": false })
+                .then(data => {
+                    console.log(" data in services", data)
+                    resolve(data)
+                })
 
-getAllTrash(request){
-console.log("req in services",request);
+                .catch(err => {
+                    console.log("error in services", err);
+                    reject(err)
+                })
+        })
 
-        return new Promise((resolve,reject)=>{
-        model.getAll(request)
-        .then(data=>{
-            if(trash==true){
-                console.log(data);
-                
-            resolve(data)
-            }
-            else {
-                console.log("nothing in trash")
-                reject(error)
-            }
+    }
+
+    getAllArchive(request) {
+        console.log("req in services", request);
+        let array = [];
+        return new Promise((resolve, reject) => {
+            model.getAll(request)
+                .then(data => {
+                    data.forEach(element => {
+                    if (element.userID === request._id || element.trash === false && element.isArchive === true) {
+                            array.push(element)
+                            resolve(array)
+                        }
+                    });
+                    console.log("array in services", array);
+                })
+                .catch(error => {
+                    reject(error)
+                })
         })
-        .catch(error=>{
-            reject(error)
+    }
+
+
+    restoreTrash(request) {
+        return new Promise((resolve, reject) => {
+            model.updateOne({ "_id": request }, { "trash": false })
+                .then(data => {
+                    resolve(data)
+                })
+                .catch(error => {
+                    reject(error)
+                })
         })
-         
-    })
-}
+    }
+
+    /**
+         * @function deleteServices is a function use to delete perticular note
+         * @param {*} req 
+         * @param {*} res 
+         */
+    deleteTrashServices(noteData) {
+        try {
+            //console.log("in note services",noteData);
+            return new Promise((resolve, reject) => {
+                //call model method for saving reset password details
+                model.delete({ "_id": noteData._id })
+                    .then((data) => {
+                        resolve(data)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    getAllTrash(request) {
+        console.log("req in services", request);
+        let array = [];
+        return new Promise((resolve, reject) => {
+            model.getAll(request)
+                .then(data => {
+                    data.forEach(element => {
+                        if (element.userID === request._id || element.isArchive === false && element.trash === true) {
+                            array.push(element)
+                            resolve(array)
+                        }
+                    });
+                    console.log("array in services", array);
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
+
+    setReminder(request) {
+        console.log(" verify----->", request);
+        return new Promise((resolve, reject) => {
+            model.updateOne({ "_id": request._id }, { "reminder": request.reminder })
+                .then(data => {
+                    console.log(" data in services", data)
+                    resolve(data)
+                })
+
+                .catch(err => {
+                    console.log("error in services", err);
+                    reject(err)
+                })
+        })
+
+    }
+
+    noteSequence(request) {
+        console.log("req in services", request);
+        let array = [];
+        return new Promise((resolve, reject) => {
+            model.getAll(request)
+                .then(data => {
+                    console.log("------data---",data);
+
+                    data.forEach(element => {
+                        if (element.userID === request._id  || element.trash === false) {
+                            array.push(element)
+                            //console.log("------arr---",array);
+                            resolve(array)
+                        }
+                    });
+                    console.log("array in services", array.reverse());
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
 
 }
 module.exports = new Services();

@@ -2,15 +2,15 @@
 
   "register":[
       {  
-        "firstName":"nisswshaa",
-        "lastName":"joshssi",
-        "emailid":"harshalibadgujar3@gmail.com",
-        "password":"nissharghf12345"
+        "firstName":"romaroy",
+        "lastName":"roy",
+        "emailid":"roma123@gmail.com",
+        "password":""
       },
       {  
         "firstName":"priya",
         "lastName":"jssi",
-        "emailid":"p9r@gmail.com",
+        "emailid":"priya@gmail.com",
         "password":"pri"
       },
       {  
@@ -31,7 +31,7 @@
     "login":[
       {  
         "emailid":"harshalibadgujar3@gmail.com",
-        "password":"nissharghf12345"
+        "password":"harshali123"
       },
       {  
         "emailid":"priya1234@gmail.com",

@@ -63,7 +63,7 @@ class Model {
     createUser(req) {
         return new Promise((resolve, reject) => {
             encrptyPassword(req.password).then((encryptedPassword) => {
-                console.log("\n\n\tAfter encryption Password :" + encryptedPassword);
+                console.log("\n\n\tAfter encryption Password : " + encryptedPassword);
                 // convert data object into json format to save into schema
                 let userData = new user({
                     "firstName": req.firstName,
@@ -116,13 +116,12 @@ class Model {
 
    
     findOne(finddata) {
-        console.log("find data",finddata);
-        
+        console.log("find data",finddata);       
         return new Promise((resolve, reject) => {
-            console.log("...");
+           // console.log("...");
             
             user.findOne(finddata).then(data => {
-                console.log("Email id  not found ", data);
+                console.log("Email id  found ", data);
                 resolve(data)
             })
                 .catch(err => {

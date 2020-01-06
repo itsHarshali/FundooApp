@@ -145,13 +145,52 @@ class noteController {
             })
     }
 
-    trash(req, res) {
+
+    isUnArchive(req, res) {
         let response = {}
         const noteData = {}
         noteData._id = req.params.noteId
+        //console.log("notedat", noteData);
+
+        service.unArchive(noteData)
+            .then(data => {
+                response.success = true
+                response.message = " note archive Restore successfully"
+                response.data = data
+                return res.status(302).send(response)//302 status code for data found
+            })
+            .catch(errors => {
+                response.success = false
+                response.message = "archive note does not Restore  "
+                response.error = errors
+                return res.status(422).send(response)
+            })
+    }
+    AllArchive(request, response) {
+        let res = {}
+        const noteData={}
+        noteData._id = request.body.data._id      
+        service.getAllArchive(noteData)
+        .then(data=>{
+               res.success = data.success;
+                res.data = data;
+                return response.status(200).send(res)
+        })
+        .catch(error=>{
+            res.success=false,
+            res.error=error
+            return response.status(422).send(res)
+        })                   
+    }
+
+
+    restoreTrash(req, res) {
+        let response = {}
+        const noteData = {}
+        //noteData._id = req.params.noteId
        // console.log('noteId',noteData);
         
-        service.isTrash(noteData)
+        service.restoreTrash(noteData)
             .then(data => {
                 response.success = true
                 response.message = "note  add in trash successfully"
@@ -166,15 +205,34 @@ class noteController {
             })
     }
 
+ 
+    deleteTrash(req, res) {
+        let response = {}
+        const noteData = {}
+        noteData._id = req.params.noteId
+
+        return new Promise((resolve, reject) => {
+            service.deleteTrashServices(noteData)
+                .then(data => {
+                    response.success = true
+                    response.message = " note delete sucessesfully"
+                    response.data = data
+                    resolve(res.status(200).send(response))
+                })
+                .catch(errors => {
+                    response.success = false
+                    response.message = " note does not delete "
+                    response.error = errors
+                    reject(res.status(422).send(response))
+
+                })
+        })
+    }
 
     allTrash(request, response) {
         let res = {}
         const noteData={}
-        noteData._id = request.params.noteId
-        //request.params.userId
-        console.log("userData---------------->>",noteData);
-        
-        //call userServices methods and pass the object
+        noteData._id = request.body.data._id      
         service.getAllTrash(noteData)
         .then(data=>{
                res.success = data.success;
@@ -187,6 +245,47 @@ class noteController {
             return response.status(422).send(res)
         })                   
     }
+
+    reminder(req, res) {
+        let response = {}
+        const noteData = {}
+        noteData._id = req.params.noteId
+        noteData.reminder=req.body.reminder
+        //console.log("notedat", noteData);
+
+        service.setReminder(noteData)
+            .then(data => {
+                response.success = true
+                response.message = " note reminder set successfully"
+                response.data = data
+                return res.status(302).send(response)//302 status code for data found
+            })
+            .catch(errors => {
+                response.success = false
+                response.message = " reminder does not set  "
+                response.error = errors
+                return res.status(422).send(response)
+            })
+    }
+
+    noteSequence(request, response) {
+        let res = {}
+        const noteData={}
+        noteData._id = request.body.data._id      
+        service.noteSequence(noteData)
+        .then(data=>{
+               res.success = data.success;
+                res.data = data;
+                return response.status(200).send(res)
+        })
+        .catch(error=>{
+            res.success=false,
+            res.error=error
+            return response.status(422).send(res)
+        })                   
+    }
+
+
 }
 
 module.exports = new noteController();

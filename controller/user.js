@@ -44,13 +44,15 @@ class Controller {
                     '_id': data._id,
                     'emailid': data.emailid
                 }
+                console.log("paylod",payload);
+                
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 console.log("token", jwtToken.token);
                 //redis set
                 client.set('Token' + data._id, jwtToken.token)
 
                 let longUrl = `${process.env.LONG_URL}` + jwtToken.token;
-                urlShortner.urlShortner(data, longUrl).then(data => {
+                urlShortner.urlShortner(data,longUrl).then(data => {
                     console.log("data", data)
                     response.success = true
                     response.message = "Registration succesfully"
@@ -92,13 +94,17 @@ class Controller {
 
             service.userLogin(loginData)
                 .then(data => {
-                    let payload = {
+                    console.log("_id ;",data);
+                    
+                    const payload = {
                         '_id': data._id,
                         'emailid': data.emailid
                     }
+                    console.log("paylod in user control",payload);
+                    
                     let jwtToken = jwtTokenGenerator.generateToken(payload);
                     console.log("jwtToken", jwtToken);
-
+                    client.set('Token' + data._id, jwtToken.token)
                     console.log("data", data);
                     response.success = true
                     response.message = "login succesfully"
@@ -144,6 +150,7 @@ class Controller {
                 }
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
                 //data.token = token;
+                client.set('Token' + data._id, jwtToken.token)
                 let url = `${process.env.RESET_URL}` + jwtToken.token;
 
                 mailSender.sendMail(data.emailid, url);

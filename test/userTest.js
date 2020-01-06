@@ -1,6 +1,4 @@
 
-
-let model = require('../app/models/usermodel');
 let loginObject=require('../utility/test.json')
 let chai = require('chai');
 let chaiHttp = require('chai-http');

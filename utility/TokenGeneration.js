@@ -45,14 +45,18 @@ module.exports = {
                 else {
                     console.log("token", JSON.stringify(decoded));
                     req.body['data'] = decoded
-
                     req.token = decoded; 
+                   // console.log("--------req.url.split('/')--->",req.url.split('/'));
+                    
+                    //const redisKey;
+              
+
                     client.get('Token'+ decoded._id,(error,data)=>{
                         if(error){
                             console.log("error occured genrating redixtoken")
                         }
                         else if ( data === token){
-                            console.log( "cache data and token found equal",data);
+                            console.log( "cachedata and token found equal",data);
                             next();  
                         }
                        

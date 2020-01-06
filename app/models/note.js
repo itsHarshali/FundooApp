@@ -137,21 +137,22 @@ class noteModel{
         }
     }
 
-   getAll(req){
-      // console.log(req,"........");       
-       return new promise((resolve,reject)=>{
+
+  //retriving all user details
+  getAll(req) {
+    return new Promise((resolve, reject) => {
         user.find({})
-        .then(data=>{
-            //console.log(data,",,,,,,,,,,,,,,,,,,,,,,,,");            
+        .then(data => {
+
+            //console.log("all data found ", data);
             resolve(data)
         })
-        .catch(error=>{
-            console.log("error");
-            reject(error)
-        })
-       })
-   }
-
+            .catch(err => {
+               // console.log(" data not found ", data);
+                reject(err)
+            })
+    })
+}
 
     /**
      * @function delete  function use to delete  notes record from database

@@ -1,6 +1,6 @@
 
 
-let model = require('../app/models/usermodel');
+
 let noteObject=require('../utility/test.json')
 let chai = require('chai');
 let chaiHttp = require('chai-http');
@@ -56,53 +56,53 @@ chai.use(chaiHttp);
       });
   });
 
- /*
-  * Test the /POST route
-  */
-  describe('/Post deleteNote', () => {
-      it('it should delete note', (done) => {
-        chai.request(server)
-            .post('/deleteNote')
-            .send(noteObject.deleteNote[0])
-            .end((err, res) => {
-                  res.should.have.status(200);
-                  res.body.should.be.a('Object');
-                 // res.body.length.should.be.eql(0);
-              done();
-            });
-      });
-      it('it should delete note', (done) => {
-        chai.request(server)
-            .post('/deleteNote')
-            .send(noteObject.deleteNote[1])
-            .end((err, res) => {
-                  res.should.have.status(200);
-                  res.body.should.be.a('Object');
-                 // res.body.length.should.be.eql(0);
-              done();
-            });
-      });
-      it('it should delete note', (done) => {
-        chai.request(server)
-            .post('/deleteNote')
-            .send(noteObject.deleteNote[2])
-            .end((err, res) => {
-                  res.should.have.status(200);
-                  res.body.should.be.a('Object');
-                 // res.body.length.should.be.eql(0);
-              done();
-            });
-      });
-      it('it should delete NOTE', (done) => {
-        chai.request(server)
-            .post('/deleteNote')
-            .send(noteObject.deleteNote[3])
-            .end((err, res) => {
-                  res.should.have.status(200);
-                  res.body.should.be.a('Object');
-                 // res.body.length.should.be.eql(0);
-              done();
-            });
-      });
-  });
+//  /*
+//   * Test the /POST route
+//   */
+//   describe('/Post deleteNote', () => {
+//       it('it should delete note', (done) => {
+//         chai.request(server)
+//             .post('/deleteNote')
+//             .send(noteObject.deleteNote[0])
+//             .end((err, res) => {
+//                   res.should.have.status(200);
+//                   res.body.should.be.a('Object');
+//                  // res.body.length.should.be.eql(0);
+//               done();
+//             });
+//       });
+//       it('it should delete note', (done) => {
+//         chai.request(server)
+//             .post('/deleteNote')
+//             .send(noteObject.deleteNote[1])
+//             .end((err, res) => {
+//                   res.should.have.status(200);
+//                   res.body.should.be.a('Object');
+//                  // res.body.length.should.be.eql(0);
+//               done();
+//             });
+//       });
+//       it('it should delete note', (done) => {
+//         chai.request(server)
+//             .post('/deleteNote')
+//             .send(noteObject.deleteNote[2])
+//             .end((err, res) => {
+//                   res.should.have.status(200);
+//                   res.body.should.be.a('Object');
+//                  // res.body.length.should.be.eql(0);
+//               done();
+//             });
+//       });
+//       it('it should delete NOTE', (done) => {
+//         chai.request(server)
+//             .post('/deleteNote')
+//             .send(noteObject.deleteNote[3])
+//             .end((err, res) => {
+//                   res.should.have.status(200);
+//                   res.body.should.be.a('Object');
+//                  // res.body.length.should.be.eql(0);
+//               done();
+//             });
+//       });
+//   });
 

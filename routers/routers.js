@@ -14,9 +14,21 @@ routes.post('/notes', token.verifyToken, note.note)
 routes.get('/notes', note.allNotes)
 routes.put('/notes/:noteId', note.noteUpdate)
 routes.delete('/notes/:noteId', note.noteDelete)
+
 routes.post('/isArchive/:noteId',note.isArchive)
-routes.post('/trash/:noteId',note.trash)
-routes.get('/trash/:noteId',note.allTrash)    
+//routes.delete('/isArchive/:noteId',note.deleteArchive)**
+routes.put('/isArchive/:noteId',note.isUnArchive)
+routes.get('/isArchive' ,token.verifyToken,note.AllArchive)
+
+
+routes.delete('/trash/:noteId',note.deleteTrash) 
+routes.put('/trash/:noteId',note.restoreTrash) 
+routes.get('/trash',token.verifyToken,note.allTrash) 
+
+routes.get('/noteSequence',token.verifyToken, note.noteSequence)
+
+routes.put('/reminder/:noteId',note.reminder)
+
 routes.get('/isEmailVerified/:url', (request, response) => {
     console.log("email verifcation..", request.params.url);
     return new Promise((resolve, reject) => {

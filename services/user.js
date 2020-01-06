@@ -48,9 +48,13 @@ class Services {
                         // userModel.findOne({"isVerified": data.isVerified})
                         // .then(data=>{
                         if (data.isVerified === true) {
-                            bcrypt.compare(loginData.password, data.password)
-                                .then((data) => {
-                                    if (data) {
+                           bcrypt.compare(loginData.password, data.password)
+                
+                            
+                                .then((element) => {
+                                    console.log("....service",element);
+                                    
+                                    if (element) {
                                         resolve(data)
                                     }
                                     else {
@@ -76,6 +80,62 @@ class Services {
         })
 
     }
+
+    // encrptyPassword(password) {
+    //     return new Promise((resolve, reject) => {
+    //         bcrypt.hash(password, 10).then((data) => {
+    //             resolve(data)
+    //         })
+    //             .catch(err => {
+    //                 reject(err)
+    //             })
+    //     })
+    // }
+
+    // userLogin(loginData) {
+    //     return new Promise((resolve, reject) => {
+    //         this.encrptyPassword(loginData.password).then((encryptedPassword) => {
+    //             console.log("after enc services", encryptedPassword);
+    //         userModel.findOne({ "emailid": loginData.emailid })
+    //             .then((data) => {
+    //                 console.log("data in services", data);
+    //                 if (data !== null) {
+    //                     // console.log("-----------",data.isVerified);
+
+    //                     // userModel.findOne({"isVerified": data.isVerified})
+    //                     // .then(data=>{
+    //                     if (data.isVerified === true) {
+    //                         bcrypt.compare(encryptedPassword, data.password)
+    //                             .then((data) => {
+    //                                 if (data) {
+    //                                     resolve(data)
+    //                                 }
+    //                                 else {
+    //                                     reject(err)
+    //                                 }
+    //                             })
+    //                     } else {
+    //                         reject(" you need check your email and verify first ");
+
+    //                     }
+    //                     // })
+    //                 }
+    //                 else if (data === null) {
+    //                     reject("this email id is not registered... ");
+
+    //                 }
+
+    //             })
+    //         })
+    //             .catch(err => {
+    //                 // console.log("error in service");
+    //                 reject(err)
+    //             })
+            
+    //     })
+
+    // }
+
 
     forgetPasswordService(loginData) {
         try {
