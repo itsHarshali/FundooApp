@@ -7,9 +7,9 @@ const userModel = require('../app/models/user')
 const client = redis.createClient(`${process.env.REDIS_PORT}`);
 
 // Print redis connect to the console
-client.on('connect', () => {
-    console.log("redis connected on port ", `${process.env.REDIS_PORT}`);
-  });
+// client.on('connect', () => {
+//     console.log("redis connected on port ", `${process.env.REDIS_PORT}`);
+//   });
 
 module.exports = {
     generateToken(payload) {

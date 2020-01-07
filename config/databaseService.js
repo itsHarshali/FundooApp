@@ -21,6 +21,10 @@ class database{
             connectTimeoutMS:1000,
             userNewurlParser:true
         })
+        mongoose.set('useNewUrlParser', true);
+        mongoose.set('useFindAndModify', false);
+        mongoose.set('useCreateIndex', true);
+        mongoose.set('useUnifiedTopology', true);
         this.monitor();
         return this.mongoose;
     }

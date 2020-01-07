@@ -5,27 +5,24 @@ let token = require('../utility/TokenGeneration.js')
 let models = require('../app/models/user')
 let user = require('../controller/user')
 let note = require('../controller/note')
+
 routes.post('/registration', user.registration)
 routes.post('/login', user.login)
 routes.post('/forgetPassword', user.forgetPasswordController)
 routes.post('/reset', token.verifyToken, user.resetPasswordController)
 
 routes.post('/notes', token.verifyToken, note.note)
-routes.get('/notes', note.allNotes)
+routes.get('/notes',token.verifyToken, note.noteSequence)
 routes.put('/notes/:noteId', note.noteUpdate)
 routes.delete('/notes/:noteId', note.noteDelete)
 
-routes.post('/isArchive/:noteId',note.isArchive)
-//routes.delete('/isArchive/:noteId',note.deleteArchive)**
-routes.put('/isArchive/:noteId',note.isUnArchive)
+routes.put('/isArchive/:noteId',note.isArchive)
+routes.put('/unArchive/:noteId',note.isUnArchive)
 routes.get('/isArchive' ,token.verifyToken,note.AllArchive)
-
 
 routes.delete('/trash/:noteId',note.deleteTrash) 
 routes.put('/trash/:noteId',note.restoreTrash) 
 routes.get('/trash',token.verifyToken,note.allTrash) 
-
-routes.get('/noteSequence',token.verifyToken, note.noteSequence)
 
 routes.put('/reminder/:noteId',note.reminder)
 

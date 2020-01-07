@@ -17,7 +17,7 @@ class Controller {
      * @param {*} res 
      */
     registration(req, res) {
-
+        try{
         req.checkBody('firstName', 'firstName must be at least 3 chars long').isLength({ min: 3 }),
             req.checkBody('lastName', 'lastName must be at least 3 chars long').isAlpha()
         req.checkBody('emailid', 'Email Must be in email format').isEmail()
@@ -72,9 +72,17 @@ class Controller {
                 response.error = errors
                 return res.status(422).send(response)
             })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            reject(res.status(500).send(response))
+        }
     }
+
     login(req, res) {
         let response = {}
+        try{
         req.checkBody('emailid', 'Email Must be in email format').isEmail()
         const errors = req.validationErrors();
         if (errors) {
@@ -121,8 +129,15 @@ class Controller {
                 })
         }
     }
+    catch (error) {
+        response.success = false
+        response.message = error           
+        reject(res.status(500).send(response))
+    }
+    }
 
     forgetPasswordController(request, response) {
+        try{
         request.checkBody('emailid', 'Email Must be in email format').isEmail()
         request.checkBody('emailid', 'Email Must be at least 30 chars long').isLength({ max: 30 })
 
@@ -169,8 +184,16 @@ class Controller {
 
                 })
         }
+          }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            reject(res.status(500).send(response))
+        }
     }
+
     resetPasswordController(request, response) {
+        try{
         console.log("ctrl", request.body.data._id)
         request.checkBody('password', 'Cannot be empty').notEmpty();
         request.checkBody('password', 'Must be at least 8 chars long').isLength({ min: 8 })
@@ -208,6 +231,12 @@ class Controller {
 
         }
     }
+    catch (error) {
+        response.success = false
+        response.message = error           
+        reject(res.status(500).send(response))
+    }
+    }
 
     urlShortnerController(request, shortenerObject) {
         try {
@@ -240,6 +269,7 @@ class Controller {
         }
     }
     isEmailVerified(req, res) {
+        try{
         var objectdata = {
             id: req.body.data._id
         }
@@ -260,12 +290,19 @@ class Controller {
                 console.log("ERROR", err);
 
                 response.success = false,
-                    response.err = err
+                response.err = err
                 return res.status(422).send(response);
             })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            reject(res.status(500).send(response))
+        }
     }
 
     addImage(req, res) {
+        try{
         console.log('req in controller', req);
         // console.log('req in controller',req.params);
 
@@ -289,7 +326,14 @@ class Controller {
 
                 return res.status(422).send(response)
             })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            reject(res.status(500).send(response))
+        }
     }
+    
 
 
 }
