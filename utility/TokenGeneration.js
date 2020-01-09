@@ -49,7 +49,6 @@ module.exports = {
                    // console.log("--------req.url.split('/')--->",req.url.split('/'));
                     
                     //const redisKey;
-              
 
                     client.get('Token'+ decoded._id,(error,data)=>{
                         if(error){
@@ -67,7 +66,7 @@ module.exports = {
             // return the req.decoded;
         }
         else {
-            res.status(400).send('Token not received')
+           return res.status(400).send('Token not received')
         }
     },
 
@@ -108,5 +107,3 @@ module.exports = {
         })
     }
 }
-
-

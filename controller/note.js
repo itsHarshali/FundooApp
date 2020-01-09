@@ -5,10 +5,11 @@ let service = require('../services/note')
 //const logger = require('./winston.js')
 require('express-validator');
 class noteController {
+    
     /**
      * @function note create note function use to create note 
-     * @param {*} req 
-     * @param {*} res 
+     * @param {string} req 
+     * @param {string} res 
      */
     note(req, res) {
         let response = {}
@@ -29,23 +30,23 @@ class noteController {
                 title: req.body.title,
                 description: req.body.description,
             }
-            return new Promise((resolve, reject) => {
+            //return new Promise((resolve, reject) => {
                 service.noteServices(data)
                     .then(data => {
                         response.success = true
                         response.message = " note create sucessesfully"
                         response.data = data
-                        resolve(res.status(200).send(response))
+                        return res.status(200).send(response)
                     })
                     .catch(errors => {
                         response.success = false
                         response.message = " note does not create "
                         response.error = errors
 
-                        reject(res.status(422).send(response))
+                        return res.status(422).send(response)
 
                     })
-            })
+           // })
         }
         catch (error) {
             response.success = false
@@ -56,8 +57,8 @@ class noteController {
     }
     /**
          * @function noteUpdate is a function use to Update  note  from database
-         * @param {*} req 
-         * @param {*} res 
+         * @param {string} req 
+         * @param {string} res 
          */
     noteUpdate(req, res) {
 
@@ -94,8 +95,8 @@ class noteController {
     }
     /**
          * @function noteDelete is a function use to Delete  note  from database
-         * @param {*} req 
-         * @param {*} res 
+         * @param {string} req 
+         * @param {string} res 
          */
     noteDelete(req, res) {
         let response = {}
@@ -127,8 +128,8 @@ class noteController {
     }
     /** 
          * @function allNotes is a function use to Display all  notes
-         * @param {*} request 
-         * @param {*} response 
+         * @param {string} request 
+         * @param {string} response 
          */
 
     allNotes(request, response) {
@@ -156,8 +157,8 @@ class noteController {
     }
     /**
        * @function isArchive Archive note function use to Archive notes  
-       * @param {*} req 
-       * @param {*} res 
+       * @param {string} req 
+       * @param {string} res 
        */
     isArchive(req, res) {
         let response = {}
@@ -189,8 +190,8 @@ class noteController {
 
     /**
          * @function isUnArchive  note function use to unArchive notes  
-         * @param {*} req 
-         * @param {*} res 
+         * @param {string} req 
+         * @param {string} res 
          */
     isUnArchive(req, res) {
         let response = {}
@@ -222,8 +223,8 @@ class noteController {
 
     /**
      * @function AllArchive  note function use to Display all Archive notes  
-     * @param {*} req 
-     * @param {*} res 
+     * @param {string} req 
+     * @param {string} res 
      */
     AllArchive(request, response) {
         let res = {}
@@ -251,8 +252,8 @@ class noteController {
 
     /**
         * @function restoreTrash  note function use to restore notes from Trash    
-        * @param {*} req 
-        * @param {*} res 
+        * @param {string} req 
+        * @param {string} res 
         */
     restoreTrash(req, res) {
         let response = {}
@@ -284,8 +285,8 @@ class noteController {
 
     /**
         * @function deleteTrash  note function use to delete  notes from Trash   
-        * @param {*} req 
-        * @param {*} res 
+        * @param {string} req 
+        * @param {string} res 
         */
     deleteTrash(req, res) {
         let response = {}
@@ -319,8 +320,8 @@ class noteController {
 
     /**
         * @function allTrash  note function use to display all  notes from Trash   
-        * @param {*} req 
-        * @param {*} res 
+        * @param {string} req 
+        * @param {string} res 
         */
     allTrash(request, response) {
         let res = {}
@@ -348,8 +349,8 @@ class noteController {
 
     /**
         * @function reminder  note function use to set reminder on note  
-        * @param {*} req 
-        * @param {*} res 
+        * @param {string} req 
+        * @param {string} res 
         */
     reminder(req, res) {
         let response = {}
@@ -383,8 +384,8 @@ class noteController {
 
     /**
          * @function noteSequence  note function use display all notes in sequencelly
-         * @param {*} req 
-         * @param {*} res 
+         * @param {string} req 
+         * @param {string} res 
          */
     noteSequence(request, response) {
         let res = {}

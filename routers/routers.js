@@ -5,6 +5,8 @@ let token = require('../utility/TokenGeneration.js')
 let models = require('../app/models/user')
 let user = require('../controller/user')
 let note = require('../controller/note')
+let label= require('../controller/label')
+let collaborator= require('../controller/collaborator')
 
 routes.post('/registration', user.registration)
 routes.post('/login', user.login)
@@ -25,6 +27,15 @@ routes.put('/trash/:noteId',note.restoreTrash)
 routes.get('/trash',token.verifyToken,note.allTrash) 
 
 routes.put('/reminder/:noteId',note.reminder)
+
+routes.post('/label',token.verifyToken,label.createLabel)
+routes.put('/label/:labelId',token.verifyToken,label.labelUpdate)
+routes.delete('/label/:labelId',token.verifyToken,label.labelDelete)
+routes.get('/label',token.verifyToken,label.allLabel)
+
+routes.post('/collaborator/:noteId/:collaboratorId',token.verifyToken,collaborator.createCollaborator)
+routes.delete('/collaborator/:collaboratorId',token.verifyToken,collaborator.deleteCollaborator)
+
 
 routes.get('/isEmailVerified/:url', (request, response) => {
     console.log("email verifcation..", request.params.url);

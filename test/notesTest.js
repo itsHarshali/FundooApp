@@ -80,8 +80,7 @@ chai.use(chaiHttp);
  
       it('it should delete note successfully', (done) => {
         chai.request(server)
-             .delete('/notes/'+noteObject.noteId[1].noteId)
-            
+             .delete('/notes/'+noteObject.noteId[1].noteId)            
             //.send(noteObject.createNote[0])
             .end((err, res) => {
                   res.should.have.status(200);
@@ -92,8 +91,7 @@ chai.use(chaiHttp);
   
       it('does not get noteID', (done) => {
         chai.request(server)
-             .delete('/notes/'+noteObject.noteId[2].noteId)
-            
+             .delete('/notes/'+noteObject.noteId[2].noteId)           
             //.send(noteObject.createNote[0])
             .end((err, res) => {
                   res.should.have.status(404);
@@ -186,8 +184,6 @@ chai.use(chaiHttp);
  
     });
 
-  
-
   describe('restore Trash API testing', () => {
  it('it should restore Trash note successfully', (done) => {
         chai.request(server)
@@ -237,78 +233,46 @@ chai.use(chaiHttp);
 
 //************************************ */
 
-// describe('/Post isArchive note', () => {
-//       it('it should isArchive note successfully', (done) => {
-//         chai.request(server)
-//             .put('/isArchive/'+noteObject.noteId[0].noteId)
-//             .end((err, res) => {
-//                   res.should.have.status(302);
-//                   res.body.should.be.a('Object');          
-//               done();
-//             });
-//       });
+describe('/Post isArchive note', () => {
+      it('it should isArchive note successfully', (done) => {
+        chai.request(server)
+            .put('/isArchive/'+noteObject.noteId[0].noteId)
+            .end((err, res) => {
+                  res.should.have.status(302);
+                  res.body.should.be.a('Object');          
+              done();
+            });
+      });
 
 
-//       it('it should isArchive note successfully', (done) => {
-//         chai.request(server)
-//             .put('/isArchive/'+noteObject.noteId[1].noteId)
-//             .end((err, res) => {
-//                   res.should.have.status(302);
-//                   res.body.should.be.a('Object');          
-//               done();
-//             });
-//       });
-//       it('it should isArchive note successfully', (done) => {
-//         chai.request(server)
-//             .put('/isArchive/'+noteObject.noteId[2].noteId)
-//             .end((err, res) => {
-//                   res.should.have.status(302);
-//                   res.body.should.be.a('Object');          
-//               done();
-//             });
-//       });
-//       it('it should isArchive note successfully', (done) => {
-//         chai.request(server)
-//             .put('/isArchive/'+noteObject.noteId[3].noteId)
-//             .end((err, res) => {
-//                   res.should.have.status(302);
-//                   res.body.should.be.a('Object');          
-//               done();
-//             });
-//       });
-// });
+      it('it should isArchive note successfully', (done) => {
+        chai.request(server)
+            .put('/isArchive/'+noteObject.noteId[1].noteId)
+            .end((err, res) => {
+                  res.should.have.status(302);
+                  res.body.should.be.a('Object');          
+              done();
+            });
+      });
+      it('it should undefined note Id', (done) => {
+        chai.request(server)
+            .put('/isArchive/'+noteObject.noteId[2].noteId)
+            .end((err, res) => {
+                  res.should.have.status(302);
+                  res.body.should.be.a('Object');          
+              done();
+            });
+      });
+      it('it should data undefined', (done) => {
+        chai.request(server)
+            .put('/isArchive/'+noteObject.noteId[3].noteId)
+            .end((err, res) => {
+                  res.should.have.status(302);
+                  res.body.should.be.a('Object');          
+              done();
+            });
+      });
+});
 
 
 
-
-//....................................
-// it('it should create note', (done) => {
-      //   chai.request(server)
-      //       .post('/notes')
-      //       .send(noteObject.createNote[1])
-      //       .end((err, res) => {
-      //             res.should.have.status(404);
-      //             res.body.should.be.a('Object');             
-      //         done();
-      //       });
-      // });
-      // it('it should create note', (done) => {
-      //   chai.request(server)
-      //       .post('/notes')
-      //       .send(noteObject.createNote[2])
-      //       .end((err, res) => {
-      //             res.should.have.status(200);
-      //             res.body.should.be.a('Object');
-      //         done();
-      //       });
-      // });
-      // it('it should CREATE NOTE', (done) => {
-      //   chai.request(server)
-      //       .post('/notes')
-      //       .send(noteObject.createNote[3])
-      //       .end((err, res) => {
-      //             res.should.have.status(422);
-      //             res.body.should.be.a('Object');
-      //         done();
-      //       });
-       //});

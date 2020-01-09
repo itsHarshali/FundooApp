@@ -226,7 +226,7 @@ class Services {
         return new Promise((resolve, reject) => {
             model.getAll(request)
                 .then(data => {
-                    console.log("------data---",data);
+                    //console.log("------data---",data);
 
                     data.forEach(element => {
                         if (element.userID === request._id  || element.trash === false) {
