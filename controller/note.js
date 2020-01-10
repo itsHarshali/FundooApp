@@ -343,12 +343,12 @@ class noteController {
         catch (error) {
             response.success = false
             response.message = error           
-            reject(res.status(500).send(response))
+           return response.status(500).send(response)
         }
     }
 
     /**
-        * @function reminder  note function use to set reminder on note  
+        * @function reminder   function use to set reminder on note  
         * @param {string} req 
         * @param {string} res 
         */
@@ -356,10 +356,10 @@ class noteController {
         let response = {}
         try{
         const noteData = {}
+        noteData.userID= req.body.data._id
         noteData._id = req.params.noteId
         noteData.reminder = req.body.reminder
         //console.log("notedat", noteData);
-
         service.setReminder(noteData)
             .then(data => {
                 response.success = true
@@ -377,9 +377,37 @@ class noteController {
         catch (error) {
             response.success = false
             response.message = error           
-            reject(res.status(500).send(response))
+            return res.status(500).send(response)
         }
     }
+    removeReminder(req, res) {
+        let response = {}
+        try{
+        const noteData = {}
+        noteData.userID= req.body.data._id
+        noteData._id = req.params.noteId
+        //console.log("notedat", noteData);
+        service.removeReminder(noteData)
+            .then(data => {
+                response.success = true
+                response.message = " remove Reminder from note successfully"
+                response.data = data
+                return res.status(302).send(response)//302 status code for data found
+            })
+            .catch(errors => {
+                response.success = false
+                response.message = "  does not remove Reminder  "
+                response.error = errors
+                return res.status(422).send(response)
+            })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            return res.status(500).send(response)
+        }
+    }
+
 
 
     /**
@@ -408,6 +436,35 @@ class noteController {
             response.success = false
             response.message = error           
             reject(res.status(500).send(response))
+        }
+    }
+    search(request, response) {
+        let res = {}
+        try{
+        const data = {}
+        data.title = request.body.title,
+        data.description = request.body.description,
+        data._id = request.body.data._id
+        service.search(data)
+            .then(data => {
+               // console.log("da----",data.description);
+                
+               // data.description= {$regex: /^a/ }
+
+                res.success = data.success;
+                res.data = data;
+                return response.status(200).send(res)
+            })
+            .catch(error => {
+                res.success = false,
+                    res.error = error
+                return response.status(422).send(res)
+            })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            return response.status(500).send(response)
         }
     }
 

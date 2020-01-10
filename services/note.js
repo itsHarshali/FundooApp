@@ -220,6 +220,30 @@ class Services {
 
     }
 
+      /**
+         * @function deleteServices is a function use to delete perticular note
+         * @param {object} noteData 
+         
+         */
+        removeReminder(noteData) {
+            try {
+                //console.log("in note services",noteData);
+                return new Promise((resolve, reject) => {
+                    //call model method for saving reset password details
+                    model.updateOne({ "_id": noteData._id }, { 'reminder': null })
+                        .then((data) => {
+                            resolve(data)
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
+                })
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+
     noteSequence(request) {
         console.log("req in services", request);
         let array = [];
@@ -236,6 +260,22 @@ class Services {
                         }
                     });
                     console.log("array in services", array.reverse());
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
+    search(request) {
+        console.log("req in services", request);
+        return new Promise((resolve, reject) => {
+            model.getSearch(request)
+                .then(data => {
+                    console.log("data in s",data);
+                    
+                  // { description: { $regex: /^a/, $options: 'i' } } )
+                    resolve(data)
+                    //console.log("array in services", data.reverse());
                 })
                 .catch(error => {
                     reject(error)

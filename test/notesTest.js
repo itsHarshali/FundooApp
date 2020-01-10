@@ -233,46 +233,46 @@ chai.use(chaiHttp);
 
 //************************************ */
 
-describe('/Post isArchive note', () => {
-      it('it should isArchive note successfully', (done) => {
-        chai.request(server)
-            .put('/isArchive/'+noteObject.noteId[0].noteId)
-            .end((err, res) => {
-                  res.should.have.status(302);
-                  res.body.should.be.a('Object');          
-              done();
-            });
-      });
+// describe('/Post isArchive note', () => {
+//       it('it should isArchive note successfully', (done) => {
+//         chai.request(server)
+//             .put('/isArchive/'+noteObject.noteId[0].noteId)
+//             .end((err, res) => {
+//                   res.should.have.status(302);
+//                   res.body.should.be.a('Object');          
+//               done();
+//             });
+//       });
 
 
-      it('it should isArchive note successfully', (done) => {
-        chai.request(server)
-            .put('/isArchive/'+noteObject.noteId[1].noteId)
-            .end((err, res) => {
-                  res.should.have.status(302);
-                  res.body.should.be.a('Object');          
-              done();
-            });
-      });
-      it('it should undefined note Id', (done) => {
-        chai.request(server)
-            .put('/isArchive/'+noteObject.noteId[2].noteId)
-            .end((err, res) => {
-                  res.should.have.status(302);
-                  res.body.should.be.a('Object');          
-              done();
-            });
-      });
-      it('it should data undefined', (done) => {
-        chai.request(server)
-            .put('/isArchive/'+noteObject.noteId[3].noteId)
-            .end((err, res) => {
-                  res.should.have.status(302);
-                  res.body.should.be.a('Object');          
-              done();
-            });
-      });
-});
+//       it('it should isArchive note successfully', (done) => {
+//         chai.request(server)
+//             .put('/isArchive/'+noteObject.noteId[1].noteId)
+//             .end((err, res) => {
+//                   res.should.have.status(302);
+//                   res.body.should.be.a('Object');          
+//               done();
+//             });
+//       });
+//       it('it should undefined note Id', (done) => {
+//         chai.request(server)
+//             .put('/isArchive/'+noteObject.noteId[2].noteId)
+//             .end((err, res) => {
+//                   res.should.have.status(302);
+//                   res.body.should.be.a('Object');          
+//               done();
+//             });
+//       });
+//       it('it should data undefined', (done) => {
+//         chai.request(server)
+//             .put('/isArchive/'+noteObject.noteId[3].noteId)
+//             .end((err, res) => {
+//                   res.should.have.status(302);
+//                   res.body.should.be.a('Object');          
+//               done();
+//             });
+//       });
+// });
 
 
 

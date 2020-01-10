@@ -17,6 +17,7 @@ routes.post('/notes', token.verifyToken, note.note)
 routes.get('/notes',token.verifyToken, note.noteSequence)
 routes.put('/notes/:noteId', note.noteUpdate)
 routes.delete('/notes/:noteId', note.noteDelete)
+routes.get('/search',token.verifyToken, note.search)
 
 routes.put('/isArchive/:noteId',note.isArchive)
 routes.put('/unArchive/:noteId',note.isUnArchive)
@@ -26,12 +27,13 @@ routes.delete('/trash/:noteId',note.deleteTrash)
 routes.put('/trash/:noteId',note.restoreTrash) 
 routes.get('/trash',token.verifyToken,note.allTrash) 
 
-routes.put('/reminder/:noteId',note.reminder)
+routes.put('/reminder/:noteId',token.verifyToken,note.reminder)
+routes.put('/removeReminder/:noteId',token.verifyToken,note.removeReminder)
 
 routes.post('/label',token.verifyToken,label.createLabel)
 routes.put('/label/:labelId',token.verifyToken,label.labelUpdate)
 routes.delete('/label/:labelId',token.verifyToken,label.labelDelete)
-routes.get('/label',token.verifyToken,label.allLabel)
+routes.get('/label',token.verifyToken,label.allLabel) 
 
 routes.post('/collaborator/:noteId/:collaboratorId',token.verifyToken,collaborator.createCollaborator)
 routes.delete('/collaborator/:collaboratorId',token.verifyToken,collaborator.deleteCollaborator)

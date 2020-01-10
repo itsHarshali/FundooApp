@@ -101,8 +101,7 @@ console.log("data in control ", data);
             try{
                 const labelData = {}
                 labelData._id = req.params.labelId,
-                labelData.userID= req.body.data._id
-              
+                labelData.userID= req.body.data._id             
             return new Promise((resolve, reject) => {
                 service.deleteServices(labelData)
                     .then(data => {
