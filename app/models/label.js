@@ -9,6 +9,11 @@ const labelSchema= mongoose.Schema({
         type: Schema.Types.ObjectId,
         require: true,
         ref:'User'
+    },
+    noteId: {
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref:'note'
     }
 },
 {
@@ -29,7 +34,8 @@ class Label{
         return new Promise((resolve, reject) => {
             const labelData = new label({
                 "label": req.label,
-                "userID": req.userID            
+                "userID": req.userID ,
+                "noteId": req.noteId              
             })
             console.log("data....",labelData);
             
@@ -66,7 +72,10 @@ class Label{
                 })
         })
     }
-
+/**
+     * @function delete function use to delete label 
+     * @param {object} deleteData 
+     */
     delete(deleteData){
         return new Promise((resolve, reject) => {
             console.log("update",deleteData)
@@ -80,6 +89,10 @@ class Label{
                 })
         })
     }
+/**
+     * @function getAll function use to display all label 
+     * @param {object} req 
+     */
 
   //retriving all user details
   getAll(req) {

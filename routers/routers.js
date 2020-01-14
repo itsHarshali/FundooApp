@@ -10,21 +10,21 @@ let collaborator= require('../controller/collaborator')
 
 routes.post('/registration', user.registration)
 routes.post('/login', user.login)
-routes.post('/forgetPassword', user.forgetPasswordController)
+routes.post('/forgetPassword',token.verifyToken, user.forgetPasswordController)//
 routes.post('/reset', token.verifyToken, user.resetPasswordController)
 
-routes.post('/notes', token.verifyToken, note.note)
-routes.get('/notes',token.verifyToken, note.noteSequence)
-routes.put('/notes/:noteId', note.noteUpdate)
-routes.delete('/notes/:noteId', note.noteDelete)
-routes.get('/search',token.verifyToken, note.search)
+routes.post('/notes', token.verifyToken,note.note)
+routes.get('/notes',token.verifyToken,note.noteSequence)
+routes.put('/notes/:noteId',token.verifyToken, note.noteUpdate)
+routes.delete('/notes/:noteId', note.noteDelete)//
+routes.get('/search/:searchKey',token.verifyToken, note.search)
 
 routes.put('/isArchive/:noteId',note.isArchive)
 routes.put('/unArchive/:noteId',note.isUnArchive)
 routes.get('/isArchive' ,token.verifyToken,note.AllArchive)
 
-routes.delete('/trash/:noteId',note.deleteTrash) 
-routes.put('/trash/:noteId',note.restoreTrash) 
+routes.delete('/trash/:noteId',note.deleteTrash) //
+routes.put('/trash/:noteId',note.restoreTrash) //
 routes.get('/trash',token.verifyToken,note.allTrash) 
 
 routes.put('/reminder/:noteId',token.verifyToken,note.reminder)
@@ -44,7 +44,7 @@ routes.get('/isEmailVerified/:url', (request, response) => {
     return new Promise((resolve, reject) => {
         models.findOne({ 'urlCode': request.params.url })
             .then((data) => {
-                console.log('daa  jhjhjhj', data);
+               // console.log('daa  jhjhjhj', data);
 
                 if (data === null) {
                     //Not Found, 404, Page Not Found, or Server Not Found error message
@@ -69,7 +69,6 @@ const singleUpload = upload.single('image');
 routes.post('/image-upload/:userId', function (req, res) {
     let data={}
     data._id=req.params.userId
-    
     console.log("user Id",req.params.userId);  
     singleUpload(req, res, function (err) {
         if (err) {          

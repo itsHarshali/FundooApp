@@ -141,15 +141,15 @@ class Services {
         try {
             //const response ={}
             return new Promise((resolve, reject) => {
-                userModel.findOne(loginData).then((data) => {
-                    console.log("/////", loginData);
+                userModel.findOne({ "emailid": request.emailid })
+                .then((data) => {
+                    console.log("/////",data);
 
                     console.log('your email matched');
 
                     resolve(data)
 
                 })
-
                     .catch(err => {
                         console.log("your Email not matched")
                         // response.success = false;

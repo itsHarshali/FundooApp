@@ -62,7 +62,8 @@ function encrptyPassword(password) {
 class Model {
     createUser(req) {
         return new Promise((resolve, reject) => {
-            encrptyPassword(req.password).then((encryptedPassword) => {
+            encrptyPassword(req.password)
+            .then((encryptedPassword) => {
                 console.log("\n\n\tAfter encryption Password : " + encryptedPassword);
                 // convert data object into json format to save into schema
                 let userData = new user({
@@ -72,7 +73,8 @@ class Model {
                     "emailid": req.emailid,
                     "isVerified":false
                 })
-                userData.save().then(data => {
+                userData.save()
+                .then(data => {
                     console.log('Registration successful ', data.firstName);
                     resolve(data)
                 })
@@ -90,7 +92,8 @@ class Model {
             console.log("req", req.body);
             var response = {}
             return new Promise((resolve, reject) => {
-                encrptyPassword(req.password).then((encryptedPassword) => {
+                encrptyPassword(req.password)
+                .then((encryptedPassword) => {
 
                     console.log('req.id');
                     user.findOneAndUpdate({ '_id': req.id },
@@ -120,7 +123,8 @@ class Model {
         return new Promise((resolve, reject) => {
            // console.log("...");
             
-            user.findOne(finddata).then(data => {
+            user.findOne(finddata)
+            .then(data => {
                 console.log("Email id  found ", data);
                 resolve(data)
             })

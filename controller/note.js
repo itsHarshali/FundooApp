@@ -29,6 +29,8 @@ class noteController {
                 userID: req.body.data._id,
                 title: req.body.title,
                 description: req.body.description,
+                labels:req.body.labels,
+                collaborators:req.body.collaborators
             }
             //return new Promise((resolve, reject) => {
                 service.noteServices(data)
@@ -57,8 +59,8 @@ class noteController {
     }
     /**
          * @function noteUpdate is a function use to Update  note  from database
-         * @param {string} req 
-         * @param {string} res 
+         * @param {object} req 
+         * @param {object} res 
          */
     noteUpdate(req, res) {
 
@@ -66,9 +68,12 @@ class noteController {
         let response = {}
         const noteData = {}
         try{
-        noteData._id = req.params.noteId,//req.param._id
+            noteData._id = req.params.noteId,//req.param._id
+            noteData.userID= req.body.data._id
             noteData.title = req.body.title,
             noteData.description = req.body.description
+            noteData.labels=req.body.labels,
+            noteData.collaborators=req.body.collaborators
 
         return new Promise((resolve, reject) => {
             service.updateServices(noteData)
@@ -442,8 +447,7 @@ class noteController {
         let res = {}
         try{
         const data = {}
-        data.title = request.body.title,
-        data.description = request.body.description,
+        data.searchKey = request.params.searchKey
         data._id = request.body.data._id
         service.search(data)
             .then(data => {

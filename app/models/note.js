@@ -10,9 +10,17 @@ const noteSchema = mongoose.Schema({
         require: true
     },
     userID: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,//referencing other documents from other collections
         require: true
     },
+    collaborators: [{             
+        type: Schema.Types.ObjectId,
+        ref:'collaborator'
+    }],
+    labels: [{            
+        type: Schema.Types.ObjectId,
+        ref:'label'
+    }],
     reminder: {
         type: Date,
         default: null
@@ -25,6 +33,7 @@ const noteSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+
     selectColor: {
         type: String,
         default: null
@@ -37,6 +46,7 @@ const noteSchema = mongoose.Schema({
         type: String,
         default: null
     }
+    
 },
     {
         timestamps: true
@@ -50,13 +60,17 @@ class noteModel {
     */
     createNote(req) {
         return new Promise((resolve, reject) => {
+            console.log("req",req.labels);
+            
             let noteData = new user({
                 "title": req.title,
                 "description": req.description,
                 "userID": req.userID,
                 "reminder": null,
                 "isArchive": false,
-                "trash": false
+                "trash": false,
+                "labels":req.labels, 
+                "collaborators":req.collaborators
             })
             noteData.save()
                 .then(data => {
@@ -142,7 +156,7 @@ class noteModel {
         //console.log("r",request);
 
         return new Promise((resolve, reject) => {
-            user.find({})
+            user.find({}).populate('label').populate('collaborator')
                 .then(data => {
                     //console.log("all data found ", data);
                     resolve(data)
@@ -156,14 +170,15 @@ class noteModel {
 
     //retriving all user details
     getSearch(request) {
-        console.log("r", request.title);
+        console.log("r", request.searchKey);
 
         return new Promise((resolve, reject) => {
             //$regex:
             user.find({
                 $or: [
-                    { "title": { $regex: request.title } },
-                    { "description": { $regex: request.description } }]
+                    { "title": { $regex: request.searchKey } },
+                   // { "label": { $regex: request.searchKey } },
+                    { "description": { $regex: request.searchKey } }]
             })
                 .then(data => {
                     // console.log("all data found ", );

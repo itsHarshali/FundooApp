@@ -27,7 +27,9 @@ class Services {
                 model.updateOne({ "_id": noteData._id }, {
                     $set: {
                         "title": noteData.title,
-                        "description": noteData.description
+                        "description": noteData.description,
+                        "labels":noteData.labels,
+                        "collaborators":noteData.collaborators
                     }
                 })
                     .then((data) => {

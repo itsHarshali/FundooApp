@@ -49,8 +49,7 @@ class Services {
     }
     /**
         * @function deleteServices is a function use to delete perticular label
-        * @param {*} req 
-        * @param {*} res 
+        * @param {object} data  
         */
     deleteServices(data) {
         try {

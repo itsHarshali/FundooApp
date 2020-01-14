@@ -1,4 +1,5 @@
 let model = require('../app/models/collaborator')
+let noteServices= require('../services/note')
 
 class Services {
     /**
@@ -10,6 +11,9 @@ class Services {
         return new Promise((resolve, reject) => {
             model.create(req)
             .then(data => {
+                   console.log("daata in collabo serv ", data);
+               // model.noteServices({ "noteId": data.noteId }, {"collaboratorId": data.collaboratorId}) 
+
                 resolve(data)
             })
                 .catch(err => {

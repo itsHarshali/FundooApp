@@ -153,6 +153,7 @@ class Controller {
         else {
             let forgotObject = {
                 emailid: request.body.emailid,
+                id: request.body.data._id
             }
             console.log("email id", forgotObject);
 
