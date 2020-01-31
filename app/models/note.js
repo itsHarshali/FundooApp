@@ -34,10 +34,6 @@ const noteSchema = mongoose.Schema({
         default: false
     },
 
-    selectColor: {
-        type: String,
-        default: null
-    },
     imageUrl: {
         type: String
     },
@@ -45,7 +41,11 @@ const noteSchema = mongoose.Schema({
     addImage: {
         type: String,
         default: null
-    }
+    },
+    colorNote: {
+        type: String,
+        default: null
+    },
     
 },
     {
@@ -59,9 +59,7 @@ class noteModel {
     * @param {*} req 
     */
     createNote(req) {
-        return new Promise((resolve, reject) => {
-            console.log("req",req.labels);
-            
+        return new Promise((resolve, reject) => {                                                                                                                               
             let noteData = new user({
                 "title": req.title,
                 "description": req.description,
@@ -70,7 +68,8 @@ class noteModel {
                 "isArchive": false,
                 "trash": false,
                 "labels":req.labels, 
-                "collaborators":req.collaborators
+                "collaborators":req.collaborators,
+                "colorNote": null
             })
             noteData.save()
                 .then(data => {

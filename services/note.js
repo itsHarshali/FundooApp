@@ -49,6 +49,33 @@ class Services {
             console.log(err);
         }
     }
+    updateColor(noteData) {
+        try {
+            //console.log("in note services",noteData);
+            return new Promise((resolve, reject) => {
+                //call model method for saving reset password details
+                model.updateOne({ "_id": noteData._id }, {
+                    $set: {
+                        "colorNote": noteData.colorNote               
+                    }
+                })
+                    .then((data) => {
+                        if (data !== null) {
+
+                            //send data to controller callback function
+                            console.log("services", data)
+                            resolve(data)
+                        }
+                    })
+                    .catch(err => {
+                        reject(err)
+                    })
+            })
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
     /**
          * @function deleteServices is a function use to delete perticular note
          * @param {*} req 
@@ -255,7 +282,29 @@ class Services {
                     //console.log("------data---",data);
 
                     data.forEach(element => {
-                        if (element.userID === request._id  || element.trash === false) {
+                        if (element.userID === request._id  || element.trash === false && element.reminder === null) {
+                            array.push(element)
+                            //console.log("------arr---",array);
+                            resolve(array)
+                        }
+                    });
+                    console.log("array in services", array.reverse());
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
+    }
+    allReminder(request) {
+        console.log("req in services", request);
+        let array = [];
+        return new Promise((resolve, reject) => {
+            model.getAll(request)
+                .then(data => {
+                    //console.log("------data---",data);
+
+                    data.forEach(element => {
+                        if (element.userID === request._id  || element.trash === false && element.reminder != null) {
                             array.push(element)
                             //console.log("------arr---",array);
                             resolve(array)

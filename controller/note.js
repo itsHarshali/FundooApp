@@ -63,7 +63,7 @@ class noteController {
          * @param {object} res 
          */
     noteUpdate(req, res) {
-
+                                                                                                                                                                                                                                                                                                                                                                                                                    
         //console.log("controller.....",req.param.d);
         let response = {}
         const noteData = {}
@@ -86,6 +86,42 @@ class noteController {
                 .catch(errors => {
                     response.success = false
                     response.message = " note does not update "
+                    response.error = errors
+                    reject(res.status(422).send(response))
+
+                })
+        })
+    }
+    catch (error) {
+        response.success = false
+        response.message = error           
+        reject(res.status(500).send(response))
+    }
+    }
+
+
+
+    colorNote(req, res) {
+                                                                                                                                                                                                                                                                                                                                                                                                                    
+        //console.log("controller.....",req.param.d);
+        let response = {}
+        const noteData = {}
+        try{
+            noteData._id = req.params.noteId,//req.param._id
+            noteData.userID= req.body.data._id
+            noteData.colorNote = req.body.colorNote
+         
+        return new Promise((resolve, reject) => {
+            service.updateColor(noteData)
+                .then(data => {
+                    response.success = true
+                    response.message = " note color sucessesfully"
+                    response.data = data
+                    resolve(res.status(200).send(response))
+                })
+                .catch(errors => {
+                    response.success = false
+                    response.message = " note does not color "
                     response.error = errors
                     reject(res.status(422).send(response))
 
@@ -426,6 +462,30 @@ class noteController {
         const noteData = {}
         noteData._id = request.body.data._id
         service.noteSequence(noteData)
+            .then(data => {
+                res.success = data.success;
+                res.data = data;
+                return response.status(200).send(res)
+            })
+            .catch(error => {
+                res.success = false,
+                    res.error = error
+                return response.status(422).send(res)
+            })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error           
+            reject(res.status(500).send(response))
+        }
+    }
+    
+    allReminder(request, response) {
+        let res = {}
+        try{
+        const noteData = {}
+        noteData._id = request.body.data._id
+        service.allReminder(noteData)
             .then(data => {
                 res.success = data.success;
                 res.data = data;

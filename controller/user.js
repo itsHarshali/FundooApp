@@ -116,6 +116,7 @@ class Controller {
                     console.log("data", data);
                     response.success = true
                     response.message = "login succesfully"
+                    response.token = jwtToken.token
                     response.data = data
 
                     return res.status(200).send(response);
@@ -153,7 +154,7 @@ class Controller {
         else {
             let forgotObject = {
                 emailid: request.body.emailid,
-                id: request.body.data._id
+                // id: request.body.data._id
             }
             console.log("email id", forgotObject);
 

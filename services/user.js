@@ -137,7 +137,7 @@ class Services {
     // }
 
 
-    forgetPasswordService(loginData) {
+    forgetPasswordService(request) {
         try {
             //const response ={}
             return new Promise((resolve, reject) => {

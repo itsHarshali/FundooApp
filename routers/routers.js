@@ -10,7 +10,7 @@ let collaborator= require('../controller/collaborator')
 
 routes.post('/registration', user.registration)
 routes.post('/login', user.login)
-routes.post('/forgetPassword',token.verifyToken, user.forgetPasswordController)//
+routes.post('/forgetPassword', user.forgetPasswordController)//
 routes.post('/reset', token.verifyToken, user.resetPasswordController)
 
 routes.post('/notes', token.verifyToken,note.note)
@@ -18,10 +18,11 @@ routes.get('/notes',token.verifyToken,note.noteSequence)
 routes.put('/notes/:noteId',token.verifyToken, note.noteUpdate)
 routes.delete('/notes/:noteId', note.noteDelete)//
 routes.get('/search/:searchKey',token.verifyToken, note.search)
+routes.put('/colorNote/:noteId',token.verifyToken,note.colorNote)
 
-routes.put('/isArchive/:noteId',note.isArchive)
+routes.put('/archive/:noteId',note.isArchive)
 routes.put('/unArchive/:noteId',note.isUnArchive)
-routes.get('/isArchive' ,token.verifyToken,note.AllArchive)
+routes.get('/archive' ,token.verifyToken,note.AllArchive)
 
 routes.delete('/trash/:noteId',note.deleteTrash) //
 routes.put('/trash/:noteId',note.restoreTrash) //
@@ -29,6 +30,7 @@ routes.get('/trash',token.verifyToken,note.allTrash)
 
 routes.put('/reminder/:noteId',token.verifyToken,note.reminder)
 routes.put('/removeReminder/:noteId',token.verifyToken,note.removeReminder)
+routes.get('/allReminder',token.verifyToken,note.allReminder)
 
 routes.post('/label',token.verifyToken,label.createLabel)
 routes.put('/label/:labelId',token.verifyToken,label.labelUpdate)
