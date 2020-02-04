@@ -40,7 +40,6 @@ routes.get('/label',token.verifyToken,label.allLabel)
 routes.post('/collaborator/:noteId/:collaboratorId',token.verifyToken,collaborator.createCollaborator)
 routes.delete('/collaborator/:collaboratorId',token.verifyToken,collaborator.deleteCollaborator)
 
-
 routes.get('/isEmailVerified/:url', (request, response) => {
     console.log("email verifcation..", request.params.url);
     return new Promise((resolve, reject) => {
