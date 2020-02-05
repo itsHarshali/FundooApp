@@ -5,6 +5,7 @@ class Services {
      * @function noteServices is a function use to provide service to create notes
      * @param {*} req  
      */
+    
     noteServices(req) {
         return new Promise((resolve, reject) => {
             model.createNote(req).then(data => {
@@ -15,6 +16,7 @@ class Services {
                 })
         })
     }
+
     /**
          * @function updateServices is a function use to update note
          * @param {*} noteData  
@@ -76,29 +78,7 @@ class Services {
             console.log(err);
         }
     }
-    /**
-         * @function deleteServices is a function use to delete perticular note
-         * @param {*} req 
-         * @param {*} res 
-         */
-    deleteServices(noteData) {
-        try {
-            //console.log("in note services",noteData);
-            return new Promise((resolve, reject) => {
-                //call model method for saving reset password details
-                model.updateOne({ "_id": noteData._id }, { 'trash': true })
-                    .then((data) => {
-                        resolve(data)
-                    })
-                    .catch(err => {
-                        reject(err)
-                    })
-            })
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
+  
     /**
          * @function getAllNotesService is a function use to Display all  notes
          * @param {*} request 
@@ -175,10 +155,33 @@ class Services {
         })
     }
 
+  /**
+         * @function deleteServices is a function use to delete perticular note
+         * @param {*} req 
+         * @param {*} res 
+         */
+        deleteServices(noteData) {
+            try {
+                //console.log("in note services",noteData);
+                return new Promise((resolve, reject) => {
+                    //call model method for saving reset password details
+                    model.updateOne({ "_id": noteData._id }, { 'trash': true })
+                        .then((data) => {
+                            resolve(data)
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
+                })
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
 
     restoreTrash(request) {
         return new Promise((resolve, reject) => {
-            model.updateOne({ "_id": request }, { "trash": false })
+            model.updateOne({ "_id": request._id }, { "trash": false })
                 .then(data => {
                     resolve(data)
                 })

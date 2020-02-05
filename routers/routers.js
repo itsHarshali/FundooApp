@@ -24,8 +24,8 @@ routes.put('/archive/:noteId',note.isArchive)
 routes.put('/unArchive/:noteId',note.isUnArchive)
 routes.get('/archive' ,token.verifyToken,note.AllArchive)
 
-routes.delete('/trash/:noteId',note.deleteTrash) //
-routes.put('/trash/:noteId',note.restoreTrash) //
+routes.delete('/trash/:noteId',token.verifyToken,note.deleteTrash) //
+routes.put('/trash/:noteId',token.verifyToken,note.restoreTrash) //
 routes.get('/trash',token.verifyToken,note.allTrash) 
 
 routes.put('/reminder/:noteId',token.verifyToken,note.reminder)

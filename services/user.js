@@ -57,7 +57,7 @@ class Services {
                                     if (element) {
                                         resolve(data)
                                     }
-                                    else {
+                                    else if(err){
                                         reject(err)
                                     }
                                 })

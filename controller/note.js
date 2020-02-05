@@ -300,6 +300,7 @@ class noteController {
         let response = {}
         try{
         const noteData = {}
+         noteData._id = request.body.data._id
         //noteData._id = req.params.noteId
         // console.log('noteId',noteData);
 
@@ -320,7 +321,7 @@ class noteController {
         catch (error) {
             response.success = false
             response.message = error           
-            reject(res.status(500).send(response))
+            return res.status(500).send(response)   
         }
     }
 
@@ -334,9 +335,10 @@ class noteController {
         try{
         const noteData = {}
         noteData._id = req.params.noteId
+        noteData.userID= req.body.data._id
 
         return new Promise((resolve, reject) => {
-            service.deleteTrashServices(noteData)
+            service.deleteServices(noteData)
                 .then(data => {
                     response.success = true
                     response.message = " note delete sucessesfully"
