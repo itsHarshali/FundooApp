@@ -141,12 +141,13 @@ class noteController {
          */
     noteDelete(req, res) {
         let response = {}
-        const noteData = {}
         try{
+        const noteData = {}
+       
         noteData._id = req.params.noteId
-
+        noteData.userID= req.body.data._id
         return new Promise((resolve, reject) => {
-            service.deleteServices(noteData)
+            service.deleteTrashServices(noteData)
                 .then(data => {
                     response.success = true
                     response.message = " note delete sucessesfully"
@@ -206,6 +207,7 @@ class noteController {
         try{
         const noteData = {}
         noteData._id = req.params.noteId
+        noteData.userId = req.body.data._id
         //console.log("notedat", noteData);
 
         service.archive(noteData)
@@ -296,24 +298,25 @@ class noteController {
         * @param {string} req 
         * @param {string} res 
         */
-    restoreTrash(req, res) {
+    restoreTrash(request, res) {
         let response = {}
         try{
         const noteData = {}
-         noteData._id = request.body.data._id
-        //noteData._id = req.params.noteId
+        noteData._id = request.params.noteId
+        noteData.userID= request.body.data._id
+
         // console.log('noteId',noteData);
 
         service.restoreTrash(noteData)
             .then(data => {
                 response.success = true
-                response.message = "note  add in trash successfully"
+                response.message = "note restore successfully"
                 response.data = data
                 return res.status(200).send(response)
             })
             .catch(error => {
                 response.success = false
-                response.message = "note does not add in trash "
+                response.message = "note does not restore successfully "
                 response.error = error
                 return res.status(422).send(response)
             })
@@ -367,6 +370,7 @@ class noteController {
         * @param {string} res 
         */
     allTrash(request, response) {
+        console.log('ALLTRASH')
         let res = {}
         try{
         const noteData = {}

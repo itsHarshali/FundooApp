@@ -96,7 +96,7 @@ class noteModel {
         console.log("data", noteData)
         return new Promise((resolve, reject) => {
             console.log("update", updateData)
-            user.findOneAndUpdate(noteData, updateData)
+            user.findOneAndUpdate(noteData, updateData,{"new":true})
                 .then(data => {
                     console.log("model", data)
                     resolve(data)

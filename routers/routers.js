@@ -16,17 +16,20 @@ routes.post('/reset', token.verifyToken, user.resetPasswordController)
 routes.post('/notes', token.verifyToken,note.note)
 routes.get('/notes',token.verifyToken,note.noteSequence)
 routes.put('/notes/:noteId',token.verifyToken, note.noteUpdate)
-routes.delete('/notes/:noteId', note.noteDelete)//
+routes.delete('/notes/:noteId',token.verifyToken, note.noteDelete)//
 routes.get('/search/:searchKey',token.verifyToken, note.search)
 routes.put('/colorNote/:noteId',token.verifyToken,note.colorNote)
 
-routes.put('/archive/:noteId',note.isArchive)
-routes.put('/unArchive/:noteId',note.isUnArchive)
+routes.put('/archive/:noteId',token.verifyToken,note.isArchive)//
+routes.put('/unArchive/:noteId',note.isUnArchive)//
 routes.get('/archive' ,token.verifyToken,note.AllArchive)
 
 routes.delete('/trash/:noteId',token.verifyToken,note.deleteTrash) //
-routes.put('/trash/:noteId',token.verifyToken,note.restoreTrash) //
-routes.get('/trash',token.verifyToken,note.allTrash) 
+routes.put('/restoreNote/:noteId',token.verifyToken,note.restoreTrash) //
+routes.get('/trash',[token.verifyToken, 
+    (req,res, next)=>{console.log('middleware called 2'); return next();},
+    (req,res, next)=>{console.log('middleware called 3'); return next();}],
+    note.allTrash) 
 
 routes.put('/reminder/:noteId',token.verifyToken,note.reminder)
 routes.put('/removeReminder/:noteId',token.verifyToken,note.removeReminder)

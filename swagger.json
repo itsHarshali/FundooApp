@@ -40,8 +40,8 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "Find pet by ID",
-                "description": "Returns a single pet",
+               
+                "description": "Returns ",
                 "parameters": [
                     {
                         "name": "body",
