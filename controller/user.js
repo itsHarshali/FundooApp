@@ -157,8 +157,6 @@ class Controller {
                 // id: request.body.data._id
             }
             console.log("email id", forgotObject);
-
-
             //call userServices methods and pass the object
             service.forgetPasswordService(forgotObject).then(data => {
                 console.log("data in controller--> ", data)
@@ -169,7 +167,6 @@ class Controller {
                 //data.token = token;
                 client.set('Token' + data._id, jwtToken.token)
                 let url = `${process.env.RESET_URL}` + jwtToken.token;
-
                 mailSender.sendMail(data.emailid, url);
                 res.success = data.success,
                     res.message = "Link successfully sent to your Email"
@@ -336,6 +333,30 @@ class Controller {
         }
     }
     
+    allUser(request, response) {
+        let res = {}
+        try{
+      
+        service.allUser(request)
+            .then(data => {
+                res.success = data.success;
+                res.data = data;
+                return response.status(200).send(res)
+            })
+            .catch(error => {
+                console.log(" somthing wrong ");
+
+                res.success = false,
+                    res.error = error
+                return response.status(422).send(res)
+            })
+        }
+        catch (error) {
+            res.success = false
+            res.message = error           
+            return response.status(500).send(res)
+        }
+    }
 
 
 }

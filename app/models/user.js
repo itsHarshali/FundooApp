@@ -149,7 +149,19 @@ class Model {
                 })
         })
     }
-
+    getAll(request) {
+        return new Promise((resolve, reject) => {
+            user.find({})
+            .then(data => {
+                console.log("data1111",data)
+                resolve(data)
+            })
+                .catch(err => {
+                    console.log("data22",data)
+                    reject(err)
+                })
+        })
+    }
 }
 
 module.exports = new Model() 

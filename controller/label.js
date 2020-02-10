@@ -108,20 +108,20 @@ console.log("data in control ", data);
                         response.success = true
                         response.message = " label delete sucessesfully"
                         response.data = data
-                        resolve(res.status(200).send(response))
+                        return res.status(200).send(response)
                     })
                     .catch(errors => {
                         response.success = false
                         response.message = " label does not delete "
                         response.error = errors
-                        reject(res.status(422).send(response))
+                        return res.status(422).send(response)
                     })
             })
         }
         catch (error) {
             response.success = false
             response.message = error          
-            reject(res.status(500).send(response))
+            return res.status(500).send(response)
         }
         }
         allLabel(request, response) {
@@ -142,9 +142,9 @@ console.log("data in control ", data);
                 })
             }
             catch (error) {
-                response.success = false
-                response.message = error           
-                reject(res.status(500).send(response))
+                res.success = false
+                res.message = error           
+               return response.status(500).send(res)
             }
         }
     

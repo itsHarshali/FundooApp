@@ -12,6 +12,7 @@ routes.post('/registration', user.registration)
 routes.post('/login', user.login)
 routes.post('/forgetPassword', user.forgetPasswordController)//
 routes.post('/reset', token.verifyToken, user.resetPasswordController)
+routes.get('/allUser',user.allUser)
 
 routes.post('/notes', token.verifyToken,note.note)
 routes.get('/notes',token.verifyToken,note.noteSequence)
