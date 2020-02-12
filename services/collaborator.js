@@ -1,21 +1,34 @@
 let model = require('../app/models/collaborator')
-let noteServices= require('../services/note')
+let noteModel = require('../app/models/note')
 
 class Services {
     /**
      * @function collaboratorService is a function use to note collaborate to other user
      * @param {object} req  
      */
-    collaboratorService(req) {
-        console.log("req", req);
-        return new Promise((resolve, reject) => {
-            model.create(req)
-            .then(data => {
-                   console.log("daata in collabo serv ", data);
-               // model.noteServices({ "noteId": data.noteId }, {"collaboratorId": data.collaboratorId}) 
 
-                resolve(data)
-            })
+    collaboratorService(userData) {
+        console.log("userData", userData);
+        return new Promise((resolve, reject) => {
+            model.create(userData)
+                .then(data => {
+                    console.log("daata in collabo serv ", data);
+                    //noteModel.noteServices({ "noteId": data.noteId }, {"collaboratorId": data.collaboratorId}) 
+
+                    noteModel.updateOne({ "_id": data.noteId }, {
+                        $push: {
+                            "collaborators": data.collaboratorId
+                        }
+                    }).then(data => {
+                        console.log(data);
+                        
+                         resolve(data)
+                    })
+                        .catch(err => {
+                            reject(err)
+                        })
+
+                })
                 .catch(err => {
                     reject(err)
                 })
@@ -43,4 +56,4 @@ class Services {
 
 
 }
-module.exports= new Services()    
+module.exports = new Services()    

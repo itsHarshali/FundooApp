@@ -155,7 +155,7 @@ class noteModel {
         //console.log("r",request);
 
         return new Promise((resolve, reject) => {
-            user.find({}).populate('label').populate('collaborator')
+            user.find({}).populate('labels').populate('collaborator')
                 .then(data => {
                     //console.log("all data found ", data);
                     resolve(data)

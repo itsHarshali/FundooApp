@@ -28,7 +28,7 @@ class Services {
                 model.updateOne({ "_id": data._id }, {
                     $set: {
                         "label": data.label
-                    }
+                    } 
                 })
                     .then((data) => {
                         if (data !== null) {

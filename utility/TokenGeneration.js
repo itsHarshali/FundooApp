@@ -31,6 +31,8 @@ module.exports = {
     },
 
     verifyToken(req, res, next) {
+        console.log("34============",req);
+        
         let token = req.header('token')//||req.params.url
         console.log(" token after vread", token);
 
