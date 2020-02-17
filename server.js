@@ -20,8 +20,8 @@ app.use(expressValidator())
 app.use('/', routes);
 
 // listen for requests 
-app.listen(2000, () => {
+app.listen(4000, () => {
     mongoose.connect();
-    console.log("Server is listening on port 2000");
+    console.log("Server is listening on port 4000");
 });
 module.exports=app

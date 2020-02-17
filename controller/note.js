@@ -69,10 +69,12 @@ class noteController {
         const noteData = {}
         try{
             noteData._id = req.params.noteId,//req.param._id
-            noteData.userID= req.body.data._id
+            noteData.userID= req.body.data._id,
             noteData.title = req.body.title,
-            noteData.description = req.body.description
+            noteData.description = req.body.description,
             noteData.labels=req.body.labels,
+            noteData.reminder = req.body.reminder,     
+            noteData.colorNote = req.body.colorNote
             noteData.collaborators=req.body.collaborators
 
         return new Promise((resolve, reject) => {

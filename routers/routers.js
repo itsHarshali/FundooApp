@@ -71,10 +71,10 @@ const upload = require('../services/file-upload')
 
 const singleUpload = upload.single('image');
 
-routes.post('/image-upload/:userId', function (req, res) {
+routes.post('/image-upload', token.verifyToken, function (req, res) {
     let data={}
-    data._id=req.params.userId
-    console.log("user Id",req.params.userId);  
+    data._id= req.body.data._id,
+    // console.log("user Id",rreq.body.data._id);  
     singleUpload(req, res, function (err) {
         if (err) {          
             console.log('File ERROR', err);
