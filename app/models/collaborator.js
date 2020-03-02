@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+const logger =require('../../config/winston.js')
 const Schema=mongoose.Schema
 const collaboratorSchema= mongoose.Schema({
     collaboratorId:{
@@ -38,7 +39,7 @@ class collaborator{
                 "noteId": req.noteId,
                 "userID": req.userID                        
             })
-            console.log("data....",dataObject);
+            logger.info("data....",dataObject);
             
             dataObject.save()
                 .then(data => {
@@ -55,10 +56,10 @@ class collaborator{
 
     delete(deleteData){
         return new Promise((resolve, reject) => {
-            console.log("update",deleteData)
+            logger.info("update",deleteData)
             collaborate.findOneAndDelete(deleteData)
             .then(data => {
-                console.log("model",data)
+                logger.info("model",data)
                 resolve(data)
             })
                 .catch(error => {

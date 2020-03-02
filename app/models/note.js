@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const logger =require('../../config/winston.js')
+
 const Schema = mongoose.Schema
 const noteSchema = mongoose.Schema({
     title: {
@@ -73,7 +75,7 @@ class noteModel {
             })
             noteData.save()
                 .then(data => {
-                    console.log('Note save sucessfully', data.title);
+                    logger.info('Note save sucessfully', data.title);
                     resolve(data)
                 })
                 .catch(err => {
@@ -85,7 +87,6 @@ class noteModel {
             })
     }
 
-
     /**
      * @function updateOne update note function use to update note 
      * @param {*} noteData 
@@ -93,12 +94,12 @@ class noteModel {
      */
 
     updateOne(noteData, updateData) {
-        console.log("data", noteData)
+        logger.info("data", noteData)
         return new Promise((resolve, reject) => {
-            console.log("update", updateData)
+            logger.info("update", updateData)
             user.findOneAndUpdate(noteData, updateData,{"new":true})
                 .then(data => {
-                    console.log("model", data)
+                    logger.info("model", data)
                     resolve(data)
                 })
                 .catch(error => {
@@ -116,11 +117,11 @@ class noteModel {
         return new Promise((resolve, reject) => {
             user.findOne({ "emailid": finddata.emailid })
                 .then(data => {
-                    //console.log("Email id  not found ", data);
+                    //logger.info("Email id  not found ", data);
                     resolve(data)
                 })
                 .catch(err => {
-                    //console.log("Email id found ", data);
+                    //logger.info("Email id found ", data);
                     reject(err)
                 })
         })
@@ -134,34 +135,33 @@ class noteModel {
 
     getAllNotes(req, callback) {
         try {
-            console.log('req')
+            logger.info('req')
             user.find({}, (err, data) => {
                 if (err) {
-                    return callback(err)
+                    return callback(err,null)
                 }
                 else {
-                    console.log(data)
+                    logger.info(data)
                     return callback(null, data);
                 }
             })
         }
         catch (err) {
-            console.log(err)
+            logger.info(err)
         }
     }
 
     //retriving all user details
     getAll(req) {
-        //console.log("r",request);
-
+        //logger.info("r",request);
         return new Promise((resolve, reject) => {
             user.find({}).populate('labels').populate('collaborator')
                 .then(data => {
-                    //console.log("all data found ", data);
+                    //logger.info("all data found ", data);
                     resolve(data)
                 })
                 .catch(err => {
-                    // console.log(" data not found ", data);
+                    // logger.info(" data not found ", data);
                     reject(err)
                 })
         })
@@ -169,7 +169,7 @@ class noteModel {
 
     //retriving all user details
     getSearch(request) {
-        console.log("r", request.searchKey);
+        logger.info("r", request.searchKey);
 
         return new Promise((resolve, reject) => {
             //$regex:
@@ -180,11 +180,11 @@ class noteModel {
                     { "description": { $regex: request.searchKey } }]
             })
                 .then(data => {
-                    // console.log("all data found ", );
+                    // logger.info("all data found ", );
                     resolve(data)
                 })
                 .catch(err => {
-                    // console.log(" data not found ", data);
+                    // logger.info(" data not found ", data);
                     reject(err)
                 })
         })
@@ -197,10 +197,10 @@ class noteModel {
 
     delete(deleteData) {
         return new Promise((resolve, reject) => {
-            console.log("update", deleteData)
+            logger.info("update", deleteData)
             user.findOneAndDelete(deleteData)
                 .then(data => {
-                    console.log("model", data)
+                    logger.info("model", data)
                     resolve(data)
                 })
                 .catch(error => {

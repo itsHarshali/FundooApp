@@ -1,5 +1,6 @@
 let model = require('../app/models/collaborator')
 let noteModel = require('../app/models/note')
+const logger = require('../config/winston.js')
 
 class Services {
     /**
@@ -8,11 +9,11 @@ class Services {
      */
 
     collaboratorService(userData) {
-        console.log("userData", userData);
+        logger.info("userData", userData);
         return new Promise((resolve, reject) => {
             model.create(userData)
                 .then(data => {
-                    console.log("daata in collabo serv ", data);
+                    logger.info("daata in collabo serv ", data);
                     //noteModel.noteServices({ "noteId": data.noteId }, {"collaboratorId": data.collaboratorId}) 
 
                     noteModel.updateOne({ "_id": data.noteId }, {
@@ -20,9 +21,9 @@ class Services {
                             "collaborators": data.collaboratorId
                         }
                     }).then(data => {
-                        console.log(data);
-                        
-                         resolve(data)
+                        logger.info(data);
+
+                        resolve(data)
                     })
                         .catch(err => {
                             reject(err)
@@ -37,7 +38,7 @@ class Services {
 
     deleteServices(data) {
         try {
-            //console.log("in  services",data);
+            //logger.info("in  services",data);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.delete({ "_id": data._id })
@@ -50,7 +51,7 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
 

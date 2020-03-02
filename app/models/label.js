@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+const logger =require('../../config/winston.js')
 const Schema=mongoose.Schema
 const labelSchema= mongoose.Schema({
     label:{
@@ -30,18 +31,18 @@ class Label{
      * @param {object} req 
      */
     createLabel(req){
-        console.log("datat in model....",req.label );
+        logger.info("datat in model....",req.label );
         return new Promise((resolve, reject) => {
             const labelData = new label({
                 "label": req.label,
                 "userID": req.userID ,
                 "noteId": req.noteId              
             })
-            console.log("data....",labelData);
+            logger.info("data....",labelData);
             
             labelData.save()
                 .then(data => {
-                    console.log('collaborate sucessfully' , data.label);
+                    logger.info(' sucessfully' , data.label);
                     resolve(data)
                 })
                     .catch(err => {
@@ -61,10 +62,10 @@ class Label{
     
     updateOne(labelData, updateData) {
         return new Promise((resolve, reject) => {
-            console.log("update1",updateData)
+            logger.info("update1",updateData)
             label.findOneAndUpdate(labelData,updateData)
             .then(data => {
-                console.log("model",data)
+                logger.info("model",data)
                 resolve(data)
             })
                 .catch(error => {
@@ -78,10 +79,10 @@ class Label{
      */
     delete(deleteData){
         return new Promise((resolve, reject) => {
-            console.log("update",deleteData)
+            logger.info("update",deleteData)
             label.findOneAndDelete(deleteData)
             .then(data => {
-                console.log("model",data)
+                logger.info("model",data)
                 resolve(data)
             })
                 .catch(error => {

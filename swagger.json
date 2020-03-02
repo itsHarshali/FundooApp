@@ -9,7 +9,7 @@
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "host": "localhost:2000",
+    "host": "localhost:4000",
     "basePath": "/",
     "tags": [
         {
@@ -35,12 +35,40 @@
         }
     },
     "paths": {
+        "/registration": {
+            "post": {
+                "tags": [
+                    "registration"
+                ],
+                "summary": "Create user",
+                "description": "Add user details for registration",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "$ref": "#/definitions/registration"
+                        }
+                    }
+                ],
+               
+                "responses": {
+                    "201": {
+                        "description": "successfully created note"
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "tags": [
                     "user"
                 ],
-               
                 "description": "Returns ",
                 "parameters": [
                     {
@@ -57,17 +85,267 @@
                     "200": {
                         "description": "successful operation"
                     },
-                    "400": {
-                        "description": "Invalid ID supplied"
+                    "422": {
+                        "description": " unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/notes": {
+            "post": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "Create note",
+                "description": "Add title and description to create note",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "$ref": "#/definitions/note"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully created note"
                     },
-                    "404": {
-                        "description": "Pet not found"
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "note"
+                ],
+                "summary": "get all note",
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully get all note"
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            }
+          
+        },
+        "/notes/5e5cbf6d279fd73b0281d3fb": {
+        "put": {
+            "tags": [
+                "update"
+            ],
+            "summary": "search update",
+            "description": "update title and description in note",
+            "parameters": [
+                {
+                    "name": "noteId",
+                    "in": "body",
+                    "required": true,
+                    "type": "string",
+                    "schema": {
+                        "$ref": "#/definitions/note"
+                    }
+                }
+            ],
+            "security": [
+                {
+                    "api_key": []
+                }
+            ],
+            "responses": {
+                "201": {
+                    "description": "successfully get all note"
+                },
+                "422": {
+                    "description": "unprocessable entity"
+                }
+            }
+        }
+    },
+
+        "/archive": {
+            "get": {
+                "tags": [
+                    "archive"
+                ],
+                "summary": "get archive note",
+                "description": "get all archive note",
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully get all archive note"
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/trash": {
+            "get": {
+                "tags": [
+                    "trash"
+                ],
+                "summary": "get trash note",
+                "description": "get all trash note",
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully get all trash note"
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/label": {
+            "get": {
+                "tags": [
+                    "label"
+                ],
+                "summary": "get  label",
+                "description": "get all label ",
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully get all label "
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "label"
+                ],
+                "summary": "create label",
+                "description": "create label ",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "$ref": "#/definitions/label"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully create label "
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            }
+        },
+       
+        "/allReminder": {
+            "get": {
+                "tags": [
+                    "allReminder"
+                ],
+                "summary": "get Reminder note",
+                "description": "get all Reminder note",
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully get all Reminder note"
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
+                    }
+                }
+            }
+            
+        },
+        "/search/zzzzzzz": {
+            "get": {
+                "tags": [
+                    "search"
+                ],
+                "summary": "search note",
+                
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successfully created note"
+                    },
+                    "422": {
+                        "description": "unprocessable entity"
                     }
                 }
             }
         }
     },
     "definitions": {
+        "registration": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "emailid": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "firstName": "riya",
+                "lastName": "shukala",
+                "emailid": "abc123@gmail.com",
+                "password": "*********"
+            }
+        },
         "user": {
             "type": "object",
             "properties": {
@@ -81,6 +359,32 @@
             "example": {
                 "emailid": "xyz@gmail.com",
                 "password": "xxxxxxxxx"
+            }
+        },
+        "note": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "title": "xyz",
+                "description": "xyz"
+            }
+        },
+        "label": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                } 
+            },
+            "example": {
+                "label": "xyz"
             }
         }
     }

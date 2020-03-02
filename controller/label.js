@@ -1,17 +1,14 @@
-
-const jwtTokenGenerator = require('../utility/TokenGeneration');
-let service =require('../services/label');
-//const logger = require('../config/winston')
+let service = require('../services/label');
+const logger = require('../config/winston')
 require('express-validator');
-class labelController{
-
+class labelController {
     createLabel(req, res) {
-        console.log("req.body.data._id---",req.body.data._id);
-        
+        logger.info("req.body.data._id---", req.body.data._id);
+
         let response = {}
         try {
             req.checkBody('label', 'please enter label name ').isLength({ min: 1 })
-           // req.checkBody('label', 'you can add only 50 letters').isLength({ max: 50 })
+            // req.checkBody('label', 'you can add only 50 letters').isLength({ max: 50 })
             const errors = req.validationErrors();
 
             if (errors) {
@@ -19,36 +16,33 @@ class labelController{
                 response.error = errors
                 return res.status(422).send(response)//The 422 (Unprocessable Entity) status code 
             }
-            console.log("req.body---,", req.body);
+            logger.info("req.body---,", req.body);
 
             let data = {
                 userID: req.body.data._id,
                 label: req.body.label,
             }
-            console.log("data ---",data);
-            
-           // return new Promise((resolve, reject) => {
-                service.labelService(data)
-                    .then(data => {
-                        response.success = true
-                        response.message = " label create sucessesfully"
-                        response.data = data
-                        return res.status(200).send(response)
-                    })
-                    .catch(errors => {
-                        response.success = false
-                        response.message = " label does not create "
-                        response.error = errors
+            logger.info("data ---", data);
+            service.labelService(data)
+                .then(data => {
+                    response.success = true
+                    response.message = " label create sucessesfully"
+                    response.data = data
+                    return res.status(200).send(response)
+                })
+                .catch(errors => {
+                    response.success = false
+                    response.message = " label does not create "
+                    response.error = errors
 
-                      return res.status(422).send(response)
+                    return res.status(422).send(response)
 
-                    })
-           // })
+                })
         }
         catch (error) {
             response.success = false
             response.message = " something wrong "
-            response.error = errors           
+            response.error = errors
             reject(res.status(500).send(response))
         }
     }
@@ -59,49 +53,49 @@ class labelController{
          */
     labelUpdate(req, res) {
         let response = {}
-        try{
-        console.log("controller.....", req.body.data._id);       
-        const data = {}       
+        try {
+            logger.info("controller.....", req.body.data._id);
+            const data = {}
             data._id = req.params.labelId,//req.param._id
-            data.userID= req.body.data._id,
-            data.label = req.body.label
-console.log("data in control ", data);
+                data.userID = req.body.data._id,
+                data.label = req.body.label
+            logger.info("data in control ", data);
 
-        //return new Promise((resolve, reject) => {
+            //return new Promise((resolve, reject) => {
             service.updateServices(data)
                 .then(data => {
                     response.success = true
                     response.message = " note update sucessesfully"
                     response.data = data
-                   return res.status(200).send(response)
+                    return res.status(200).send(response)
                 })
                 .catch(errors => {
                     response.success = false
                     response.message = " note does not update "
                     response.error = errors
-                   return res.status(422).send(response)
+                    return res.status(422).send(response)
 
                 })
-       // })
-    }
-    catch (error) {
-        response.success = false
-        response.message = error           
-        return res.status(500).send(response)
-    }
+            // })
+        }
+        catch (error) {
+            response.success = false
+            response.message = error
+            return res.status(500).send(response)
+        }
     }
 
-      /**
-         * @function noteDelete is a function use to Delete  note  from database
-         * @param {string} req 
-         * @param {string} res 
-         */
-        labelDelete(req, res) {
-            let response = {}
-            try{
-                const labelData = {}
-                labelData._id = req.params.labelId,
-                labelData.userID= req.body.data._id             
+    /**
+       * @function noteDelete is a function use to Delete  note  from database
+       * @param {string} req 
+       * @param {string} res 
+       */
+    labelDelete(req, res) {
+        let response = {}
+        try {
+            const labelData = {}
+            labelData._id = req.params.labelId,
+                labelData.userID = req.body.data._id
             return new Promise((resolve, reject) => {
                 service.deleteServices(labelData)
                     .then(data => {
@@ -120,13 +114,13 @@ console.log("data in control ", data);
         }
         catch (error) {
             response.success = false
-            response.message = error          
+            response.message = error
             return res.status(500).send(response)
         }
-        }
-        allLabel(request, response) {
-            let res = {}
-            try{
+    }
+    allLabel(request, response) {
+        let res = {}
+        try {
             const data = {}
             data._id = request.body.data._id
             service.allLabel(data)
@@ -140,14 +134,13 @@ console.log("data in control ", data);
                         res.error = error
                     return response.status(422).send(res)
                 })
-            }
-            catch (error) {
-                res.success = false
-                res.message = error           
-               return response.status(500).send(res)
-            }
         }
-    
+        catch (error) {
+            res.success = false
+            res.message = error
+            return response.status(500).send(res)
+        }
+    }
 
 }
-module.exports= new labelController()
+module.exports = new labelController()

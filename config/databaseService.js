@@ -19,12 +19,14 @@ class database{
     connect(){
         this.mongoose.connect(this.url,{
             connectTimeoutMS:1000,
-            userNewurlParser:true
+            useNewUrlParser:true,
+            useUnifiedTopology: true,
+            useCreateIndex: true
         })
-        mongoose.set('useNewUrlParser', true);
-        mongoose.set('useFindAndModify', false);
-        mongoose.set('useCreateIndex', true);
-        mongoose.set('useUnifiedTopology', true);
+        // mongoose.set('useNewUrlParser', true);
+        // mongoose.set('useFindAndModify', false);
+        // mongoose.set('useCreateIndex', true);
+        // mongoose.set('useUnifiedTopology', true);
         this.monitor();
         return this.mongoose;
     }

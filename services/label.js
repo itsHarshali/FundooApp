@@ -1,4 +1,5 @@
 let model = require('../app/models/label')
+let logger = require('../config/winston.js')
 
 class Services {
     /**
@@ -6,7 +7,7 @@ class Services {
      * @param {object} req  
      */
     labelService(req) {
-        console.log("req", req);
+        logger.info("req", req);
         return new Promise((resolve, reject) => {
             model.createLabel(req).then(data => {
                 resolve(data)
@@ -22,19 +23,19 @@ class Services {
          */
     updateServices(data) {
         try {
-            console.log("in note services", data, "data._id", data._id);
+            logger.info("in note services", data, "data._id", data._id);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.updateOne({ "_id": data._id }, {
                     $set: {
                         "label": data.label
-                    } 
+                    }
                 })
                     .then((data) => {
                         if (data !== null) {
 
                             //send data to controller callback function
-                            console.log("services", data)
+                            logger.info("services", data)
                             resolve(data)
                         }
                     })
@@ -44,7 +45,7 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
     /**
@@ -53,7 +54,7 @@ class Services {
         */
     deleteServices(data) {
         try {
-            //console.log("in note services",data);
+            //logger.info("in note services",data);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.delete({ "_id": data._id })
@@ -66,17 +67,17 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
 
     allLabel(request) {
-        console.log("req in services", request);
+        logger.info("req in services", request);
         return new Promise((resolve, reject) => {
             model.getAll(request)
                 .then(data => {
                     resolve(data)
-                    //console.log("array in services", data.reverse());
+                    //logger.info("array in services", data.reverse());
                 })
                 .catch(error => {
                     reject(error)

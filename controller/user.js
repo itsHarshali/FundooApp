@@ -1,8 +1,9 @@
 
 const jwtTokenGenerator = require('../utility/TokenGeneration');
 const mailSender = require('../utility/mailSender');
+const logger =require('../config/winston.js')
 let service = require('../services/user')
-let validator = require('express-validator');
+require('express-validator');
 let Shortner = require('../utility/URLshortner')
 const redis = require('redis')
 require('dotenv').config();
@@ -44,16 +45,16 @@ class Controller {
                     '_id': data._id,
                     'emailid': data.emailid
                 }
-                console.log("paylod",payload);
+                logger.info("paylod",payload);
                 
                 let jwtToken = jwtTokenGenerator.generateToken(payload);
-                console.log("token", jwtToken.token);
+                logger.info("token", jwtToken.token);
                 //redis set
                 client.set('Token' + data._id, jwtToken.token)
 
                 let longUrl = `${process.env.LONG_URL}` + jwtToken.token;
                 urlShortner.urlShortner(data,longUrl).then(data => {
-                    console.log("data", data)
+                    logger.info("data", data)
                     response.success = true
                     response.message = "Registration succesfully"
                     response.data = data
@@ -92,37 +93,36 @@ class Controller {
         }
 
         else {
-            console.log("token");
+            logger.info("token");
 
             const loginData = {}
 
             loginData.emailid = req.body.emailid,
                 loginData.password = req.body.password
-            console.log("login data");
+            logger.info("login data");
 
             service.userLogin(loginData)
                 .then(data => {
-                    console.log("_id ;",data);
+                    logger.info("_id ;",data);
                     
                     const payload = {
                         '_id': data._id,
                         'emailid': data.emailid
                     }
-                    console.log("paylod in user control",payload);
-                    
+                    logger.info("paylod in user control",payload);
                     let jwtToken = jwtTokenGenerator.generateToken(payload);
-                    console.log("jwtToken", jwtToken);
+                    logger.info("jwtToken", jwtToken);
                     client.set('Token' + data._id, jwtToken.token)
-                    console.log("data", data);
+                    //logger.info("data", data);
                     response.success = true
                     response.message = "login succesfully"
                     response.token = jwtToken.token
-                    response.data = data
+                   response.data = data
 
                     return res.status(200).send(response);
                 })
                 .catch(err => {
-                    console.log("you need to first registare");
+                    logger.info("you need to first registare");
                     response.success = false
                     response.error = err
 
@@ -148,7 +148,7 @@ class Controller {
             res.success = false;
             res.message = error[0].msg;
             res.error = error;
-            console.log(res);
+            logger.info(res);
             return response.status(422).send(res);
         }
         else {
@@ -156,10 +156,10 @@ class Controller {
                 emailid: request.body.emailid,
                 // id: request.body.data._id
             }
-            console.log("email id", forgotObject);
+            logger.info("email id", forgotObject);
             //call userServices methods and pass the object
             service.forgetPasswordService(forgotObject).then(data => {
-                console.log("data in controller--> ", data)
+                logger.info("data in controller--> ", data)
                 let payload = {
                     '_id': data._id
                 }
@@ -175,7 +175,7 @@ class Controller {
                 return response.status(200).send({ res, token: jwtToken.token })
             })
                 .catch(err => {
-                    console.log(err)
+                    logger.info(err)
                     res.success = false,
                         res.message = "please chake your email"
 
@@ -193,14 +193,14 @@ class Controller {
 
     resetPasswordController(request, response) {
         try{
-        console.log("ctrl", request.body.data._id)
+        logger.info("ctrl", request.body.data._id)
         request.checkBody('password', 'Cannot be empty').notEmpty();
         request.checkBody('password', 'Must be at least 8 chars long').isLength({ min: 8 })
         request.checkBody('password', 'Password contain alphabetical chars and numbers').isAlphanumeric()
         let res = {};
         const errors = request.validationErrors()
         if (errors) {
-            console.log('err')
+            logger.info('err')
             res.success = false;
             res.message = errors[0].msg;
             res.error = errors;
@@ -211,14 +211,14 @@ class Controller {
                 password: request.body.password,
                 id: request.body.data._id
             }
-            //console.log("pa", resetObject);
+            //logger.info("pa", resetObject);
 
             //call userServices methods and pass the object
             service.resetPasswordService(resetObject).then(data => {
                 // res.success = data.success;
                 res.success = true;
                 res.data = data;
-                console.log("response in controller", data);
+                logger.info("response in controller", data);
 
                 return response.status(200).send(res)
             })
@@ -272,21 +272,21 @@ class Controller {
         var objectdata = {
             id: req.body.data._id
         }
-        console.log("_id----->", req.body.data._id);
+        logger.info("_id----->", req.body.data._id);
         const response = {}
         service.emailVerified(objectdata)
             .then(data => {
-                console.log("ssdfsassda", data);
+                logger.info("ssdfsassda", data);
 
                 // response.success = data.success;
                 response.success = true;
                 response.data = data;
-                // console.log("response in controller", data);
+                // logger.info("response in controller", data);
 
                 return res.status(302).send(response)
             })
             .catch(err => {
-                console.log("ERROR", err);
+                logger.info("ERROR", err);
 
                 response.success = false,
                 response.err = err
@@ -302,8 +302,8 @@ class Controller {
 
     addImage(req, res) {
         try{
-        console.log('req in controller', req);
-        // console.log('req in controller',req.params);
+        logger.info('req in controller', req);
+        // logger.info('req in controller',req.params);
 
         // const  imageData={}
         //     imageData._id=req.params.userId
@@ -311,7 +311,7 @@ class Controller {
         let response = {}
         service.image(req).then(data => {
 
-            console.log("data", data);
+            logger.info("data", data);
             response.success = true
             response.message = "image save succesfully"
             response.data = data
@@ -319,7 +319,7 @@ class Controller {
             return res.status(200).send(response);
         })
             .catch(err => {
-                console.log(" somthing wrong to save image");
+                logger.info(" somthing wrong to save image");
                 response.success = false
                 response.error = err
 
@@ -344,7 +344,7 @@ class Controller {
                 return response.status(200).send(res)
             })
             .catch(error => {
-                console.log(" somthing wrong ");
+                logger.info(" somthing wrong ");
 
                 res.success = false,
                     res.error = error

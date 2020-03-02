@@ -1,8 +1,6 @@
 
-const jwtTokenGenerator = require('../utility/TokenGeneration');
-const mailSender = require('../utility/mailSender');
+const logger =require('../config/winston.js')
 let service = require('../services/note')
-//const logger = require('./winston.js')
 require('express-validator');
 class noteController {
     
@@ -15,15 +13,13 @@ class noteController {
         let response = {}
         try {
             req.checkBody('description', 'please add description ').isLength({ min: 1 })
-            // req.checkBody('password', 'Password contain alphabetical chars and numbers')
             const errors = req.validationErrors();
-
             if (errors) {
                 response.success = false
                 response.error = errors
                 return res.status(422).send(response)//The 422 (Unprocessable Entity) status code 
             }
-            console.log("userId:req.body._id,", req.body);
+            logger.info("userId:req.body._id,", req.body);
 
             let data = {
                 userID: req.body.data._id,
@@ -32,7 +28,6 @@ class noteController {
                 labels:req.body.labels,
                 collaborators:req.body.collaborators
             }
-            //return new Promise((resolve, reject) => {
                 service.noteServices(data)
                     .then(data => {
                         response.success = true
@@ -48,7 +43,7 @@ class noteController {
                         return res.status(422).send(response)
 
                     })
-           // })
+          
         }
         catch (error) {
             response.success = false
@@ -64,11 +59,11 @@ class noteController {
          */
     noteUpdate(req, res) {
                                                                                                                                                                                                                                                                                                                                                                                                                     
-        //console.log("controller.....",req.param.d);
+        //logger.info("controller.....",req.param.d);
         let response = {}
         const noteData = {}
         try{
-            noteData._id = req.params.noteId,//req.param._id
+            noteData._id = req.params.noteId,
             noteData.userID= req.body.data._id,
             noteData.title = req.body.title,
             noteData.description = req.body.description,
@@ -101,15 +96,12 @@ class noteController {
     }
     }
 
-
-
-    colorNote(req, res) {
-                                                                                                                                                                                                                                                                                                                                                                                                                    
-        //console.log("controller.....",req.param.d);
+    colorNote(req, res) {                                                                                                                                                                                                                                                                                                                                                                                                                    
+        //logger.info("controller.....",req.param.d);
         let response = {}
         const noteData = {}
         try{
-            noteData._id = req.params.noteId,//req.param._id
+            noteData._id = req.params.noteId,
             noteData.userID= req.body.data._id
             noteData.colorNote = req.body.colorNote
          
@@ -182,7 +174,7 @@ class noteController {
         //call userServices methods and pass the object
         service.getAllNotesService(request, (err, data) => {
             if (err) {
-                console.log(err)
+                logger.info(err)
                 res.success = false,
                     res.err = err
                 return response.status(422).send(res);
@@ -210,7 +202,7 @@ class noteController {
         const noteData = {}
         noteData._id = req.params.noteId
         noteData.userId = req.body.data._id
-        //console.log("notedat", noteData);
+        //logger.info("notedat", noteData);
 
         service.archive(noteData)
             .then(data => {
@@ -243,7 +235,7 @@ class noteController {
         try{
         const noteData = {}
         noteData._id = req.params.noteId
-        //console.log("notedat", noteData);
+        //logger.info("notedat", noteData);
 
         service.unArchive(noteData)
             .then(data => {
@@ -307,7 +299,7 @@ class noteController {
         noteData._id = request.params.noteId
         noteData.userID= request.body.data._id
 
-        // console.log('noteId',noteData);
+        // logger.info('noteId',noteData);
 
         service.restoreTrash(noteData)
             .then(data => {
@@ -372,7 +364,7 @@ class noteController {
         * @param {string} res 
         */
     allTrash(request, response) {
-        console.log('ALLTRASH')
+        logger.info('ALLTRASH')
         let res = {}
         try{
         const noteData = {}
@@ -408,7 +400,7 @@ class noteController {
         noteData.userID= req.body.data._id
         noteData._id = req.params.noteId
         noteData.reminder = req.body.reminder
-        //console.log("notedat", noteData);
+        //logger.info("notedat", noteData);
         service.setReminder(noteData)
             .then(data => {
                 response.success = true
@@ -435,7 +427,7 @@ class noteController {
         const noteData = {}
         noteData.userID= req.body.data._id
         noteData._id = req.params.noteId
-        //console.log("notedat", noteData);
+        //logger.info("notedat", noteData);
         service.removeReminder(noteData)
             .then(data => {
                 response.success = true
@@ -456,8 +448,6 @@ class noteController {
             return res.status(500).send(response)
         }
     }
-
-
 
     /**
          * @function noteSequence  note function use display all notes in sequencelly
@@ -519,7 +509,7 @@ class noteController {
         data._id = request.body.data._id
         service.search(data)
             .then(data => {
-               // console.log("da----",data.description);
+               // logger.info("da----",data.description);
                 
                // data.description= {$regex: /^a/ }
 
@@ -540,7 +530,5 @@ class noteController {
         }
     }
 
-
 }
-
 module.exports = new noteController();

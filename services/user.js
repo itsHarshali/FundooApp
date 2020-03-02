@@ -1,6 +1,6 @@
 let userModel = require('../app/models/user')
 const bcrypt = require('bcrypt')
-
+let logger = require('../config/winston.js')
 
 class Services {
 
@@ -8,7 +8,7 @@ class Services {
         try {
             return new Promise((resolve, reject) => {
                 userModel.findOne(req).then((data) => {
-                    console.log("data in serv", data);
+                    logger.info("data in serv", data);
 
                     if (data === null) {
 
@@ -24,13 +24,13 @@ class Services {
                     }
                 })
                     .catch(err => {
-                        console.log("error in service");
+                        logger.info("error in service");
                         reject(err)
                     })
             })
 
         } catch (error) {
-            console.log(error);
+            logger.info(error);
         }
     }
 
@@ -40,24 +40,26 @@ class Services {
         return new Promise((resolve, reject) => {
             userModel.findOne({ "emailid": loginData.emailid })
                 .then((data) => {
-                    console.log("data in services", data);
+                    logger.info("data in services", data);
 
                     if (data !== null) {
-                        // console.log("-----------",data.isVerified);
+                        // logger.info("-----------",data.isVerified);
 
                         // userModel.findOne({"isVerified": data.isVerified})
                         // .then(data=>{
                         if (data.isVerified === true) {
-                           bcrypt.compare(loginData.password, data.password)
-                
-                            
+                            bcrypt.compare(loginData.password, data.password)
+
+
                                 .then((element) => {
-                                    console.log("....service",element);
-                                    
+                                    // logger.info("....service", element);
+                                    console.log("....service", element);
+
+
                                     if (element) {
                                         resolve(data)
                                     }
-                                    else if(err){
+                                    else if (err) {
                                         reject(err)
                                     }
                                 })
@@ -74,84 +76,29 @@ class Services {
 
                 })
                 .catch(err => {
-                    // console.log("error in service");
+                    // logger.info("error in service");
                     reject(err)
                 })
         })
 
     }
 
-    // encrptyPassword(password) {
-    //     return new Promise((resolve, reject) => {
-    //         bcrypt.hash(password, 10).then((data) => {
-    //             resolve(data)
-    //         })
-    //             .catch(err => {
-    //                 reject(err)
-    //             })
-    //     })
-    // }
-
-    // userLogin(loginData) {
-    //     return new Promise((resolve, reject) => {
-    //         this.encrptyPassword(loginData.password).then((encryptedPassword) => {
-    //             console.log("after enc services", encryptedPassword);
-    //         userModel.findOne({ "emailid": loginData.emailid })
-    //             .then((data) => {
-    //                 console.log("data in services", data);
-    //                 if (data !== null) {
-    //                     // console.log("-----------",data.isVerified);
-
-    //                     // userModel.findOne({"isVerified": data.isVerified})
-    //                     // .then(data=>{
-    //                     if (data.isVerified === true) {
-    //                         bcrypt.compare(encryptedPassword, data.password)
-    //                             .then((data) => {
-    //                                 if (data) {
-    //                                     resolve(data)
-    //                                 }
-    //                                 else {
-    //                                     reject(err)
-    //                                 }
-    //                             })
-    //                     } else {
-    //                         reject(" you need check your email and verify first ");
-
-    //                     }
-    //                     // })
-    //                 }
-    //                 else if (data === null) {
-    //                     reject("this email id is not registered... ");
-
-    //                 }
-
-    //             })
-    //         })
-    //             .catch(err => {
-    //                 // console.log("error in service");
-    //                 reject(err)
-    //             })
-            
-    //     })
-
-    // }
-
-
+  
     forgetPasswordService(request) {
         try {
             //const response ={}
             return new Promise((resolve, reject) => {
                 userModel.findOne({ "emailid": request.emailid })
-                .then((data) => {
-                    console.log("/////",data);
+                    .then((data) => {
+                        // logger.info("/////", data);
 
-                    console.log('your email matched');
+                        // logger.info('your email matched');
 
-                    resolve(data)
+                        resolve(data)
 
-                })
+                    })
                     .catch(err => {
-                        console.log("your Email not matched")
+                        logger.info("your Email not matched")
                         // response.success = false;
                         // response.message = "your Email not matched";
                         reject(err);
@@ -160,18 +107,18 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
     resetPasswordService(request) {
         try {
-            console.log("in services");
+            logger.info("in services");
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 userModel.update(request).then((data) => {
 
                     //send data to controller callback function
-                    console.log("services", data)
+                    // logger.info("services", data)
                     resolve(data)
                 })
 
@@ -181,21 +128,15 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
 
     urlShorteningServices(request, shortnerObject) {
-        console.log("request-------------->", request);
+        // logger.info("request-------------->", request);
         return new Promise((resolve, reject) => {
             userModel.findOne({ "emailid": request.emailid }).then(data => {
-                // if (error) {
-                //     reject(error)
-                // }
-                // else  {
-                //     resolve(error)
-                // }
-                console.log("in service", data)
+                logger.info("in service", data)
                 if (data !== null) {
                     userModel.updateOne({ "_id": request.id },
                         {
@@ -219,51 +160,45 @@ class Services {
 
     emailVerified(request) {
         try {
-            //console.log("email verify");
+            //logger.info("email verify");
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 userModel.updateOne({ "_id": request.id }, { "isVerified": true })
                     .then(data => {
-
                         //send data to controller callback function
-                        console.log(" data in services", data)
+                        // logger.info(" data in services", data)
                         resolve(data)
                     })
-
                     .catch(err => {
-                        console.log("error in services", err);
-
+                        // logger.info("error in services", err);
                         reject(err)
                     })
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
 
     image(request) {
         try {
-            //console.log("email verify");
+            //logger.info("email verify");
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 userModel.updateOne({ "_id": request._id }, { "imageUrl": request.imageUrl })
                     .then(data => {
-
                         //send data to controller callback function
-                        console.log(" data in services", data)
+                        // logger.info(" data in services", data)
                         resolve(data)
                     })
-
                     .catch(err => {
-                        console.log("error in services", err);
-
+                        // logger.info("error in services", err);
                         reject(err)
                     })
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
 
@@ -281,5 +216,4 @@ class Services {
     }
 
 }
-
 module.exports = new Services();

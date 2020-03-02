@@ -1,4 +1,5 @@
 let model = require('../app/models/note')
+let logger =require('../config/winston.js')
 
 class Services {
     /**
@@ -23,7 +24,7 @@ class Services {
          */
     updateServices(noteData) {
         try {
-            //console.log("in note services",noteData);
+            //logger.info("in note services",noteData);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.updateOne({ "_id": noteData._id }, {
@@ -38,7 +39,7 @@ class Services {
                         if (data !== null) {
 
                             //send data to controller callback function
-                            console.log("services", data)
+                            logger.info("services", data)
                             resolve(data)
                         }
                     })
@@ -48,12 +49,12 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
     updateColor(noteData) {
         try {
-            //console.log("in note services",noteData);
+            //logger.info("in note services",noteData);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.updateOne({ "_id": noteData._id }, {
@@ -65,7 +66,7 @@ class Services {
                         if (data !== null) {
 
                             //send data to controller callback function
-                            console.log("services", data)
+                            logger.info("services", data)
                             resolve(data)
                         }
                     })
@@ -75,7 +76,7 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
   
@@ -99,36 +100,36 @@ class Services {
             })
         }
         catch (error) {
-            console.log(error);
+            logger.info(error);
         }
     }
     archive(request) {
-        console.log(" verify----->", request);
+        logger.info(" verify----->", request);
         return new Promise((resolve, reject) => {
             model.updateOne({ "_id": request }, { "isArchive": true })
                 .then(data => {
-                    console.log(" data in services", data)
+                    logger.info(" data in services", data)
                     resolve(data)
                 })
 
                 .catch(err => {
-                    console.log("error in services", err);
+                    logger.info("error in services", err);
                     reject(err)
                 })
         })
 
     }
     unArchive(request) {
-        console.log(" verify-----", request);
+        logger.info(" verify-----", request);
         return new Promise((resolve, reject) => {
             model.updateOne({ "_id": request }, { "isArchive": false })
                 .then(data => {
-                    console.log(" data in services", data)
+                    logger.info(" data in services", data)
                     resolve(data)
                 })
 
                 .catch(err => {
-                    console.log("error in services", err);
+                    logger.info("error in services", err);
                     reject(err)
                 })
         })
@@ -136,7 +137,7 @@ class Services {
     }
 
     getAllArchive(request) {
-        console.log("req in services", request);
+        logger.info("req in services", request);
         let array = [];
         return new Promise((resolve, reject) => {
             model.getAll(request)
@@ -147,7 +148,7 @@ class Services {
                             resolve(array)
                         }
                     });
-                    console.log("array in services", array);
+                    logger.info("array in services", array);
                 })
                 .catch(error => {
                     reject(error)
@@ -162,7 +163,7 @@ class Services {
          */
         deleteServices(noteData) {
             try {
-                //console.log("in note services",noteData);
+                //logger.info("in note services",noteData);
                 return new Promise((resolve, reject) => {
                     //call model method for saving reset password details
                     model.updateOne({ "_id": noteData._id }, { 'trash': true })
@@ -175,13 +176,13 @@ class Services {
                 })
             }
             catch (err) {
-                console.log(err);
+                logger.info(err);
             }
         }
 
     restoreTrash(noteData) {
         try {
-            //console.log("in note services",noteData);
+            //logger.info("in note services",noteData);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.updateOne({ "_id": noteData._id }, { 'trash': false })
@@ -194,7 +195,7 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
     /**
@@ -204,7 +205,7 @@ class Services {
          */
     deleteTrashServices(noteData) {
         try {
-            //console.log("in note services",noteData);
+            //logger.info("in note services",noteData);
             return new Promise((resolve, reject) => {
                 //call model method for saving reset password details
                 model.delete({ "_id": noteData._id })
@@ -217,12 +218,12 @@ class Services {
             })
         }
         catch (err) {
-            console.log(err);
+            logger.info(err);
         }
     }
 
     getAllTrash(request) {
-        console.log("req in services", request);
+        logger.info("req in services", request);
         let array = [];
         return new Promise((resolve, reject) => {
             model.getAll(request)
@@ -233,7 +234,7 @@ class Services {
                             resolve(array)
                         }
                     });
-                    console.log("array in services", array);
+                    logger.info("array in services", array);
                 })
                 .catch(error => {
                     reject(error)
@@ -242,16 +243,16 @@ class Services {
     }
 
     setReminder(request) {
-        console.log(" verify----->", request);
+        logger.info(" verify----->", request);
         return new Promise((resolve, reject) => {
             model.updateOne({ "_id": request._id }, { "reminder": request.reminder })
                 .then(data => {
-                    console.log(" data in services", data)
+                    logger.info(" data in services", data)
                     resolve(data)
                 })
 
                 .catch(err => {
-                    console.log("error in services", err);
+                    logger.info("error in services", err);
                     reject(err)
                 })
         })
@@ -265,7 +266,7 @@ class Services {
          */
         removeReminder(noteData) {
             try {
-                //console.log("in note services",noteData);
+                //logger.info("in note services",noteData);
                 return new Promise((resolve, reject) => {
                     //call model method for saving reset password details
                     model.updateOne({ "_id": noteData._id }, { 'reminder': null })
@@ -278,26 +279,26 @@ class Services {
                 })
             }
             catch (err) {
-                console.log(err);
+                logger.info(err);
             }
         }
 
     noteSequence(request) {
-        console.log("req in services", request);
+        logger.info("req in services", request);
         let array = [];
         return new Promise((resolve, reject) => {
             model.getAll(request)
                 .then(data => {
-                    //console.log("------data---",data);
+                    //logger.info("------data---",data);
 
                     data.forEach(element => {
                         if (element.userID === request._id  || element.trash === false && element.reminder === null && element.isArchive === false) {
                             array.push(element)
-                            //console.log("------arr---",array);
+                            //logger.info("------arr---",array);
                             resolve(array)
                         }
                     });
-                    console.log("array in services", array.reverse());
+                    logger.info("array in services", array.reverse());
                 })
                 .catch(error => {
                     reject(error)
@@ -305,21 +306,21 @@ class Services {
         })
     }
     allReminder(request) {
-        console.log("req in services", request);
+        logger.info("req in services", request);
         let array = [];
         return new Promise((resolve, reject) => {
             model.getAll(request)
                 .then(data => {
-                    //console.log("------data---",data);
+                    //logger.info("------data---",data);
 
                     data.forEach(element => {
                         if (element.userID === request._id  || element.trash === false && element.reminder != null) {
                             array.push(element)
-                            //console.log("------arr---",array);
+                            //logger.info("------arr---",array);
                             resolve(array)
                         }
                     });
-                    console.log("array in services", array.reverse());
+                    logger.info("array in services", array.reverse());
                 })
                 .catch(error => {
                     reject(error)
@@ -327,15 +328,15 @@ class Services {
         })
     }
     search(request) {
-        console.log("req in services", request);
+        logger.info("req in services", request);
         return new Promise((resolve, reject) => {
             model.getSearch(request)
                 .then(data => {
-                    console.log("data in s",data);
+                    logger.info("data in s",data);
                     
                   // { description: { $regex: /^a/, $options: 'i' } } )
                     resolve(data)
-                    //console.log("array in services", data.reverse());
+                    //logger.info("array in services", data.reverse());
                 })
                 .catch(error => {
                     reject(error)

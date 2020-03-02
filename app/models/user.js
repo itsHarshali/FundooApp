@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const TokenGenerator = require('../../utility/TokenGeneration.js');
 const bcrypt = require('bcrypt')
-
+const logger = require('../../config/winston.js')
 const UserSchema = mongoose.Schema({
     firstName: {
         type: String,
@@ -44,9 +44,7 @@ const UserSchema = mongoose.Schema({
     {
         timestamps: true
     });
-
 let user = mongoose.model('User', UserSchema);
-
 
 function encrptyPassword(password) {
     return new Promise((resolve, reject) => {
@@ -63,87 +61,84 @@ class Model {
     createUser(req) {
         return new Promise((resolve, reject) => {
             encrptyPassword(req.password)
-            .then((encryptedPassword) => {
-                console.log("\n\n\tAfter encryption Password : " + encryptedPassword);
-                // convert data object into json format to save into schema
-                let userData = new user({
-                    "firstName": req.firstName,
-                    "lastName": req.lastName,
-                    "password": encryptedPassword,
-                    "emailid": req.emailid,
-                    "isVerified":false
-                })
-                userData.save()
-                .then(data => {
-                    console.log('Registration successful ', data.firstName);
-                    resolve(data)
-                })
-                    .catch(err => {
-                        reject(err)
+                .then((encryptedPassword) => {
+                    logger.info("\n\n\tAfter encryption Password : " + encryptedPassword);
+                    // convert data object into json format to save into schema
+                    let userData = new user({
+                        "firstName": req.firstName,
+                        "lastName": req.lastName,
+                        "password": encryptedPassword,
+                        "emailid": req.emailid,
+                        "isVerified": false
                     })
-            })
+                    userData.save()
+                        .then(data => {
+                            logger.info('Registration successful ', data.firstName);
+                            resolve(data)
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
+                })
                 .catch((error) => {
                     reject(error)
                 })
         })
     }
 
-    update(req) {      
-            console.log("req", req.body);
-            var response = {}
-            return new Promise((resolve, reject) => {
-                encrptyPassword(req.password)
+    update(req) {
+        logger.info("req", req.body);
+        var response = {}
+        return new Promise((resolve, reject) => {
+            encrptyPassword(req.password)
                 .then((encryptedPassword) => {
-
-                    console.log('req.id');
+                    logger.info('req.id');
                     user.findOneAndUpdate({ '_id': req.id },
                         { 'password': encryptedPassword },
-                        {new: true}, (err, success) => {
+                        { new: true }, (err, success) => {
                             if (err) {
                                 reject(err + " update password error")
                             }
                             else {
-                                console.log('Changed password succesfully');
-                                console.log("in model", success)
+                                logger.info('Changed password succesfully');
+                                logger.info("in model", success)
                                 response.success = true;
                                 response.message = 'Changed password succesfully';
                                 resolve(response);
                             }
                         })
                 })
-                    .catch((error) => {
-                        reject(error)
-                    })
-            })
+                .catch((error) => {
+                    reject(error)
+                })
+        })
     }
 
-   
     findOne(finddata) {
-        console.log("find data",finddata);       
+        logger.info("find data", finddata);
         return new Promise((resolve, reject) => {
-           // console.log("...");
-            
+            // logger.info("...");
             user.findOne(finddata)
-            .then(data => {
-                console.log("Email id  found ", data);
-                resolve(data)
-            })
+                .then(data => {
+                    logger.info("Email id  found ", data);
+                    resolve(data)
+                })
                 .catch(err => {
-                    //console.log("Email id not found ");
+                    //logger.info("Email id not found ");
                     reject(err)
                 })
         })
     }
 
     updateOne(request, dataUpdate) {
-        //console.log("data",request) //id print etc
+        //logger.info("data",request) //id print etc
         return new Promise((resolve, reject) => {
-            console.log("update",dataUpdate)
-            user.findOneAndUpdate(request,dataUpdate,{new:true})
-            .then(data => {
-                console.log("model",data)
-                resolve(data)
-            })
+            logger.info("update", dataUpdate)
+            user.findOneAndUpdate(request, dataUpdate, { new: true })
+                .then(data => {
+                    logger.info("model", data)
+                    resolve(data)
+                })
                 .catch(error => {
                     reject(error)
                 })
@@ -152,17 +147,17 @@ class Model {
     getAll(request) {
         return new Promise((resolve, reject) => {
             user.find({})
-            .then(data => {
-                console.log("data1111",data)
-                resolve(data)
-            })
+                .then(data => {
+                    logger.info("data1111", data)
+                    resolve(data)
+                })
                 .catch(err => {
-                    console.log("data22",data)
+                    logger.info("data22", data)
                     reject(err)
                 })
         })
     }
 }
 
-module.exports = new Model() 
+module.exports = new Model()
 
