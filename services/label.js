@@ -1,4 +1,5 @@
 let model = require('../app/models/label')
+let noteModel = require('../app/models/note')
 let logger = require('../config/winston.js')
 
 class Services {
@@ -84,5 +85,75 @@ class Services {
                 })
         })
     }
+    addLabel(labelData) {
+        logger.info("in label services...", labelData)
+        let dataId = {
+            '_id': labelData._id
+        }
+        let dataToBeUpdate = {
+            'noteId': labelData.noteId,
+        }
+        return new Promise((resolve, reject) => {
+            model.updateOne(dataId, dataToBeUpdate)
+                .then((data) => {
+                    if (data !== null) {
+                        logger.info(".......services...",data)
+                    //     let noteData = {
+                    //         "_id": labelData.noteId
+                    //     }
+                        // logger.info("...........services..." + noteData)
+                        // let update = {
+                        //     $push: {
+                        //         'label': data
+                        //     }
+                        // }
+
+                        noteModel.updateOne({ "_id": data.noteId }, {
+                            $push: {
+                                "labels": data._id
+                            }
+                            })
+                        // noteModel.updateOne(noteData, update)
+                            .then((element) => {
+                                logger.info(element);
+                                resolve(element)
+                            })
+                    }
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+        })
+    }
+    removeLabel(labelData) {
+        let dataId = {
+            '_id': labelData._id
+        }
+        let dataToBeUpdate = {
+            'noteId':  labelData.noteId,
+        }
+        return new Promise((resolve, reject) => {
+            model.updateOne(dataId, dataToBeUpdate)
+                .then((data) => {
+                    if (data !== null) {
+                        logger.info(".......services...",data)
+                    
+                        noteModel.updateOne({ "_id": data.noteId },  {
+                            $pull: {
+                                "labels": data._id
+                            }
+                            })
+                            .then((element) => {
+                                logger.info("element",element);
+                                resolve(element)
+                            })
+                    }
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+        })
+    }
+
 }
 module.exports = new Services();

@@ -90,6 +90,58 @@ class labelController {
        * @param {string} req 
        * @param {string} res 
        */
+
+      addRemoveLabel(req, res) {
+        let response = {}
+        try {
+            let labelData = {}
+            logger.info("req.params.labelId...", req.params);
+
+            labelData._id = req.params.labelId,
+            labelData.noteId = req.body.noteId
+            labelData.label = req.body.label
+            if (req.params.update === 'add') {
+                logger.info("req.params.update,,,,", req.params.update);
+
+                service.addLabel(labelData)
+                    .then((data) => {
+                        response.success = true;
+                        response.message = " Label added successfully "
+                        response.data = data
+                        return res.status(200).send(response)
+                    })
+                    .catch((error) => {
+                        response.success = false;
+                        response.message = " Label does not remove"
+                        response.error = error
+                        return res.status(422).send(response);
+                    })
+            } else if (req.params.update === 'remove') {
+                logger.info("req.params.update,,,,", req.params.update);
+                service.removeLabel(labelData)
+                    .then((data) => {
+                        response.success = true;
+                        response.message = " Label removed successfully "
+                        response.data = data
+                        return res.status(200).send(response)
+                    })
+                    .catch((error) => {
+                        response.success = false;
+                        response.message = " Label does not remove"
+                        response.error = error
+                        return res.status(422).send(response);
+                    })
+            }
+        } catch (err) {
+            response.success = false;
+            response.message = "something bad happened"
+            response.error = err
+            return res.status(500).send(response);
+        }
+    }
+
+
+
     labelDelete(req, res) {
         let response = {}
         try {
